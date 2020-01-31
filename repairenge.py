@@ -33,7 +33,7 @@ class Repairenge:
         # 1 -> button is pressed
         self.controls = {"up": False, "down": False, "left": False, "right": False, "action_0": False}
 
-        self._ship = Ship.Ship()
+        self._ship = Ship.Ship("resources/ship/base.png")
         self._starfield = starfield.StarField(100)
         self._shipmodules = []
 
@@ -44,7 +44,7 @@ class Repairenge:
         # self._shipmodules.draw()
 
     def update(self, dt):
-        # print(self.controls)
+        #print(self.controls)
         self._starfield.update(dt)
         self._ship.update(dt)
         for shipmodule in self._shipmodules:
