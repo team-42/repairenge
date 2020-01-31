@@ -1,5 +1,7 @@
 import pyglet
 from pyglet.window import key
+import Ship
+import starfield
 
 controls_to_follow = ["ABS_RX", "ABS_RY", "ABS_X", "ABS_Y", "BTN_TL", "BTN_TR", "BTN_TL2", "BTN_TR2", "BTN_A", "BTN_B",
                       "BTN_Y", "BTN_X"]
@@ -31,18 +33,18 @@ class Repairenge:
         # 1 -> button is pressed
         self.controls = {"up": False, "down": False, "left": False, "right": False, "action_0": False}
 
-        self._ship = Ship()
-        self._starfield = Starfield()
+        self._ship = Ship.Ship()
+        self._starfield = starfield.StarField(100)
         self._shipmodules = []
 
     def draw(self):
 
         self._starfield.draw()
-        self._ship.draw()
-        self._shipmodules.draw()
+        # self._ship.draw()
+        # self._shipmodules.draw()
 
     def update(self, dt):
-        print(self.controls)
+        # print(self.controls)
         self._starfield.update(dt)
         self._ship.update(dt)
         for shipmodule in self._shipmodules:
@@ -158,5 +160,5 @@ def on_draw():
     repairenge.draw()
 
 
-pyglet.clock.schedule_interval(update, 1.0 / 10.0)
+pyglet.clock.schedule_interval(update, 1.0 / 60.0)
 pyglet.app.run()
