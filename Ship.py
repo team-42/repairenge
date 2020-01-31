@@ -1,5 +1,4 @@
-import ShipModule
-
+import ship_modules.ShipModuleSimplePhaser as smsp
 
 class Ship:
     def __init__(self):
@@ -17,14 +16,15 @@ class Ship:
         self.mass = 1000.0
 
         # modules
-        self.modules = []
+        self.modules = [smsp.ShipModuleSimplePhaser(0, 0)]
 
     def update(self, dt):
         """
         :param dt:
         :return:
         """
-        pass
+        for mod in self.modules:
+            mod.module_action(dt)
 
     def upgrade(self, sm):
         sm.module_initial()

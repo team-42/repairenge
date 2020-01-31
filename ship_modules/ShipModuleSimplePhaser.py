@@ -1,9 +1,9 @@
-import ShipModule
+from ship_modules import ShipModule
 
 
 class ShipModuleSimplePhaser(ShipModule.ShipModule):
-    def __init__(self):
-        super(ShipModule, self).__init__(10, 0, 0)
+    def __init__(self, x, y):
+        super(ShipModule, self).__init__(10, x, y)
         self.cd = 1
         self.ts_check_fire = self.cd
 
@@ -11,4 +11,6 @@ class ShipModuleSimplePhaser(ShipModule.ShipModule):
         ship.mass += self.mass
 
     def module_action(self, dt):
-        pass
+        self.ts_check_fire -= dt
+        if self.ts_check_fire <= 0:
+            pass  # fire
