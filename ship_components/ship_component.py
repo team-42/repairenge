@@ -3,18 +3,17 @@ import globals
 
 
 class ShipComponent(pyglet.sprite.Sprite):
-    def __init__(self, mass, x, y, *args, **kwargs):
+    def __init__(self, mass, x, y, owner, *args, **kwargs):
         super(ShipComponent, self).__init__(*args, **kwargs)
         self.mass = mass
         self._local_x = x
         self._local_y = y
+        self._owner = owner
 
     # module actions are executed each frame
     def module_action(self, dt):
-        ship_x = globals.player_ship.x
-        ship_y = globals.player_ship.y
-        self.x = ship_x + self._local_x
-        self.y = ship_y + self._local_y
+        self.x = self._owner.x + self._local_x
+        self.y = self._owner.y + self._local_y
 
     def module_initial(self, ship):
         pass

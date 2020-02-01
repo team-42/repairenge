@@ -6,6 +6,8 @@ from constants import Controls
 from constants import Resources
 from constants import BatchNames
 import globals
+import enemies.drone
+import random
 
 controls_to_follow = ["ABS_RX", "ABS_RY", "ABS_X", "ABS_Y", "BTN_TL", "BTN_TR", "BTN_TL2", "BTN_TR2", "BTN_A", "BTN_B",
                       "BTN_Y", "BTN_X"]
@@ -104,13 +106,19 @@ class Repairenge:
         globals.player_ship.update(dt)
 
         # update all projectiles and delete them if they are not alive
-        self._update_and_delete(globals.projectiles, dt)
+        self._update_and_delete(globals.player_projectiles, dt)
+        self._update_and_delete(globals.enemy_projectiles, dt)
 
         # update all enemies and delete them if they are not alive
         self._update_and_delete(globals.enemies, dt)
 
         # update all "free" components and delete them if they are not alive
         self._update_and_delete(globals.components, dt)
+
+        # randomly add enemies:
+        if random.random() < dt * 0.5:
+            drone = enemies.drone.Drone(1010, random.random() * 200 + 400)
+            globals.enemies.append(drone)
 
     def on_key_press(self, symbol, modifiers):
         """

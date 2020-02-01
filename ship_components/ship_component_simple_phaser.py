@@ -7,13 +7,15 @@ from constants import BatchNames
 
 
 class ShipComponentSimplePhaser(ship_component.ShipComponent):
-    def __init__(self, x, y, *args, **kwargs):
-        super(ShipComponentSimplePhaser, self).__init__(10, x, y,
+    def __init__(self, x, y, owner, *args, **kwargs):
+        super(ShipComponentSimplePhaser, self).__init__(10, x, y, owner,
                                                         globals.resources[Resources.Image_Ship_Module_Simple_Phaser],
                                                         batch=globals.sprite_batches[BatchNames.Component_Batch],
                                                         *args, *kwargs)
-        self.cd = 0.2
-        self.ts_check_fire = self.cd
+        self.cd = 1
+        self.ts_check_fire = self.cd  #
+        if owner._is_enemy:
+            self.ts_check_fire *= random.random()
 
     def module_initial(self, ship):
         ship.mass += self.mass
@@ -23,6 +25,13 @@ class ShipComponentSimplePhaser(ship_component.ShipComponent):
         self.ts_check_fire -= dt
         if self.ts_check_fire <= 0:
             self.ts_check_fire = self.cd - 0.01 + 0.02 * random.random()
-            globals.projectiles.append(
-                ProjectileLaser(globals.player_ship.x + self._local_x, globals.player_ship.y + self._local_y)
-            )
+
+            # check: is this phaser from the player or an enemy?
+            if self._owner._is_enemy:
+                globals.enemy_projectiles.append(
+                    ProjectileLaser(self._owner.x + self._local_x, self._owner.y + self._local_y, -1)
+                )
+            else:
+                globals.player_projectiles.append(
+                    ProjectileLaser(self._owner.x + self._local_x, self._owner.y + self._local_y, 1)
+                )

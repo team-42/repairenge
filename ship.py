@@ -5,11 +5,15 @@ from constants import BatchNames
 
 
 class Ship(pyglet.sprite.Sprite):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, is_enemy, *args, **kwargs):
         super(Ship, self).__init__(globals.resources[Resources.Image_Ship_Module_Base],
                                    batch=globals.sprite_batches[BatchNames.Player_Ship_Batch], *args, **kwargs)
         self.x = 100.0
         self.y = 100.0
+
+        # set this to true if this is an enemy ship
+        self._is_enemy = is_enemy
+        self.alive = True
 
         # Health Segment
         self.base_health = 100
