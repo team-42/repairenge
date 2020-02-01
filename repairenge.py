@@ -160,6 +160,8 @@ class Repairenge:
         :param dt:
         :return:
         """
+        if self.game_condition != CONDITION_RUNNING:
+            return
         # print(self.controls)
         self._starfield.update(dt)
 
