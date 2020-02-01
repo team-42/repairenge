@@ -2,6 +2,8 @@ import pyglet
 from pyglet.window import key
 import ship
 import starfield
+from constants import GameObjects
+from constants import Controls
 
 controls_to_follow = ["ABS_RX", "ABS_RY", "ABS_X", "ABS_Y", "BTN_TL", "BTN_TR", "BTN_TL2", "BTN_TR2", "BTN_A", "BTN_B",
                       "BTN_Y", "BTN_X"]
@@ -28,31 +30,75 @@ class Repairenge:
         self._devices = devices
         self._keyboard = keyboard
 
+        self.game_objects = dict()
+        # list of projectiles
+        self.game_objects[GameObjects.Projectiles] = []
+        # list of enemies
+        self.game_objects[GameObjects.Enemies] = []
+        # list of components
+        self.game_objects[GameObjects.Components] = []
         # inputs: up, down, left, right, action button
         # 0 -> no button pressed
         # 1 -> button is pressed
-        self.controls = {"up": False, "down": False, "left": False, "right": False, "action_0": False}
+        self.game_objects[GameObjects.Controls] = {Controls.Up: False, Controls.Down: False, Controls.Left: False,
+                                                   Controls.Right: False, Controls.Action_0: False}
+        # the players ship
+        self.game_objects[GameObjects.Ship] = ship.Ship()
 
-        image = pyglet.resource.image("resources/ship/base.png")
-        self._ship = ship.Ship(image)
+        # the background starfield
         self._starfield = starfield.StarField(100)
-        self._projectiles = []
-        self._shipmodules = []
 
     def draw(self):
+        """
+        called once per frame to draw everything
+        :return:
+        """
 
         self._starfield.draw()
-        for projectile in self._projectiles:
+        for projectile in self.game_objects[GameObjects.Projectiles]:
             projectile.draw()
-        self._ship.draw()
-        # self._shipmodules.draw()
+
+        for enemy in self.game_objects[GameObjects.Enemies]:
+            enemy.draw()
+
+        # draw ship:
+        self.game_objects[GameObjects.Ship].draw()
+        # draw its modules:
+        for ship_component in self.game_objects[GameObjects.Ship].modules:
+            ship_component.draw()
+
+    def _update_and_delete(self, list_of_things, dt):
+        # update all things and delete them if they are not alive
+        i = 0
+        while i < len(list_of_things):
+            list_of_things[i].update(dt, self.game_objects)
+            if not list_of_things[i].alive:
+                if i == len(list_of_things) - 1:
+                    list_of_things.pop()
+                else:
+                    list_of_things[i] = list_of_things.pop()
+            else:
+                i += 1
 
     def update(self, dt):
+        """
+        main update method - called once per frame - for game logic
+        :param dt:
+        :return:
+        """
         # print(self.controls)
         self._starfield.update(dt)
-        self._ship.update(dt, self.controls)
-        for shipmodule in self._shipmodules:
-            shipmodule.update(dt)
+
+        self.game_objects[GameObjects.Ship].update(dt, self.game_objects)
+
+        # update all projectiles and delete them if they are not alive
+        self._update_and_delete(self.game_objects[GameObjects.Projectiles], dt)
+
+        # update all enemies and delete them if they are not alive
+        self._update_and_delete(self.game_objects[GameObjects.Enemies], dt)
+
+        # update all "free" components and delete them if they are not alive
+        self._update_and_delete(self.game_objects[GameObjects.Components], dt)
 
     def on_key_press(self, symbol, modifiers):
         """
@@ -62,15 +108,15 @@ class Repairenge:
         :return:
         """
         if symbol == key.W:
-            self.controls['up'] = True
+            self.game_objects[GameObjects.Controls][Controls.Up] = True
         elif symbol == key.S:
-            self.controls['down'] = True
+            self.game_objects[GameObjects.Controls][Controls.Down] = True
         elif symbol == key.A:
-            self.controls['left'] = True
+            self.game_objects[GameObjects.Controls][Controls.Left] = True
         elif symbol == key.D:
-            self.controls['right'] = True
+            self.game_objects[GameObjects.Controls][Controls.Right] = True
         elif symbol == key.E:
-            self.controls['action_0'] = True
+            self.game_objects[GameObjects.Controls][Controls.Action_0] = True
 
     def on_key_release(self, symbol, modifiers):
         """
@@ -80,15 +126,15 @@ class Repairenge:
         :return:
         """
         if symbol == key.W:
-            self.controls['up'] = False
+            self.game_objects[GameObjects.Controls][Controls.Up] = False
         elif symbol == key.S:
-            self.controls['down'] = False
+            self.game_objects[GameObjects.Controls][Controls.Down] = False
         elif symbol == key.A:
-            self.controls['left'] = False
+            self.game_objects[GameObjects.Controls][Controls.Left] = False
         elif symbol == key.D:
-            self.controls['right'] = False
+            self.game_objects[GameObjects.Controls][Controls.Right] = False
         elif symbol == key.E:
-            self.controls['action_0'] = False
+            self.game_objects[GameObjects.Controls][Controls.Action_0] = False
 
 
 repairenge = Repairenge(window, devices, keyboard)
@@ -107,37 +153,37 @@ def watch_control(device, control, repairenge):
     @control.event
     def on_change(value):
         if control.raw_name == "ABS_X":
-            if value < 120:
-                repairenge.controls["left"] = True
-                repairenge.controls["right"] = False
-            elif value > 130:
-                repairenge.controls["right"] = True
-                repairenge.controls["left"] = False
+            if value < 110:
+                repairenge.game_objects[GameObjects.Controls][Controls.Left] = True
+                repairenge.game_objects[GameObjects.Controls][Controls.Right] = False
+            elif value > 140:
+                repairenge.game_objects[GameObjects.Controls][Controls.Right] = True
+                repairenge.game_objects[GameObjects.Controls][Controls.Left] = False
             else:
-                repairenge.controls["right"] = False
-                repairenge.controls["left"] = False
+                repairenge.game_objects[GameObjects.Controls][Controls.Right] = False
+                repairenge.game_objects[GameObjects.Controls][Controls.Left] = False
 
         if control.raw_name == "ABS_Y":
-            if value < 120:
-                repairenge.controls["up"] = True
-                repairenge.controls["down"] = False
-            elif value > 130:
-                repairenge.controls["down"] = True
-                repairenge.controls["up"] = False
+            if value < 110:
+                repairenge.game_objects[GameObjects.Controls][Controls.Up] = True
+                repairenge.game_objects[GameObjects.Controls][Controls.Down] = False
+            elif value > 140:
+                repairenge.game_objects[GameObjects.Controls][Controls.Down] = True
+                repairenge.game_objects[GameObjects.Controls][Controls.Up] = False
             else:
-                repairenge.controls["down"] = False
-                repairenge.controls["up"] = False
+                repairenge.game_objects[GameObjects.Controls][Controls.Down] = False
+                repairenge.game_objects[GameObjects.Controls][Controls.Up] = False
 
     if isinstance(control, pyglet.input.base.Button):
         @control.event
         def on_press():
             if control.raw_name == "BTN_A":
-                repairenge.controls["action_0"] = True
+                repairenge.game_objects[GameObjects.Controls][Controls.Action_0] = True
 
         @control.event
         def on_release():
             if control.raw_name == "BTN_A":
-                repairenge.controls["action_0"] = False
+                repairenge.game_objects[GameObjects.Controls][Controls.Action_0] = False
 
 
 # search for ps4 controller (or other things with controller in its name)
@@ -164,5 +210,5 @@ def on_draw():
     repairenge.draw()
 
 
-pyglet.clock.schedule_interval(update, 1.0 / 60.0)
+pyglet.clock.schedule_interval(update, 1.0 / 60)
 pyglet.app.run()
