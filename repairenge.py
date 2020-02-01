@@ -103,11 +103,13 @@ class Repairenge:
 
         globals.resources[Resources.Image_Ship_Module_Base] = pyglet.resource.image(
             "resources/ship/ship_body.png")
-        util.center_image(globals.resources[Resources.Image_Ship_Module_Base])
+        globals.resources[Resources.Image_Ship_Module_Base].anchor_x = 32 + 16
+        globals.resources[Resources.Image_Ship_Module_Base].anchor_y = 16
 
         globals.resources[Resources.Image_Ship_Module_Enemy] = pyglet.resource.image(
             "resources/ship/enemy_easy_body.png")
-        util.center_image(globals.resources[Resources.Image_Ship_Module_Enemy])
+        globals.resources[Resources.Image_Ship_Module_Enemy].anchor_x = 32 + 16
+        globals.resources[Resources.Image_Ship_Module_Enemy].anchor_y = 16
 
         globals.resources[Resources.Image_Ship_Module_Simple_Phaser] = pyglet.resource.image(
             "resources/ship/component_onbase_phaser.png")
