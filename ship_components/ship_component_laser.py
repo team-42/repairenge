@@ -63,6 +63,7 @@ class ShipComponentLaser(ship_component.ShipComponent):
                 for proj in projectile:
                     globals.player_projectiles.append(proj)
 
+
     def init_simple_laser(self):
         self.mass = 10
         self.dmg = 10

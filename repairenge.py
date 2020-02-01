@@ -147,8 +147,8 @@ class Repairenge:
     def check_collision_between_ships(self, ship_a, ship_b, dt):
         if ship_a.alive and ship_b.alive:
             if util.is_colliding(ship_a, ship_b):
-                dmg_for_a = ship_b.mass * ship_b.engine_power * dt
-                dmg_for_b = ship_a.mass * ship_a.engine_power * dt
+                dmg_for_a = ship_b.mass * ship_b.engine_power * dt / 1000000
+                dmg_for_b = ship_a.mass * ship_a.engine_power * dt / 1000000
                 ship_a.damage(dmg_for_a)
                 ship_b.damage(dmg_for_b)
                 print("dmg for a: {}".format(dmg_for_a))
