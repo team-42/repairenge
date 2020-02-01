@@ -15,13 +15,14 @@ class Ship(pyglet.sprite.Sprite):
         self.current_health = self.base_health * self.health_multiplier
 
         # ship movement properties
-        self.engine_power = 1.0
-        self.mass = 1000.0
+        self.engine_power = 100.0
+        self.mass = 1.0
 
         # modules
         self.modules = [smsp.ShipModuleSimplePhaser(0, 0)]
 
-    def update(self, dt):
+
+    def update(self, dt, controls):
         """
         :param dt:
         :return:
@@ -29,11 +30,20 @@ class Ship(pyglet.sprite.Sprite):
         for mod in self.modules:
             mod.module_action(dt)
 
+        # controls:
+        if controls["up"]:
+            self.y += self.engine_power / self.mass * dt
+        if controls["down"]:
+            self.y -= self.engine_power / self.mass * dt
+        if controls["left"]:
+            self.x -= self.engine_power / self.mass * dt
+        if controls["right"]:
+            self.x += self.engine_power / self.mass * dt
+
+
+
     def upgrade(self, sm):
         sm.module_initial()
-
-    def draw(self):
-        pass
 
     def get_health(self):
         return (self.base_health * self.health_multiplier) - self.damage_taken
