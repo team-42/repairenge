@@ -16,5 +16,3 @@ class HeavyHull(ship_component.ShipComponent):
 
     def update(self, dt):
         super(HeavyHull, self).update(dt)
-        if self._owner is None:
-            return
