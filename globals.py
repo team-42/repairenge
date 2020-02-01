@@ -13,7 +13,7 @@ player_projectiles = []  # fired by the player, can only hit enemies
 enemy_projectiles = []  # fired by enemies, can only hit the player
 # list of enemies
 enemies = []
-# list of components
+# list of free floating components
 components = []
 # inputs: up, down, left, right, action button
 # 0 -> no button pressed

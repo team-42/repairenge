@@ -6,8 +6,14 @@ from constants import BatchNames
 
 class Ship(pyglet.sprite.Sprite):
     def __init__(self, is_enemy, *args, **kwargs):
+        if is_enemy:
+            batch = globals.sprite_batches[BatchNames.Enemy_Batch]
+        else:
+            batch = globals.sprite_batches[BatchNames.Player_Ship_Batch]
+
         super(Ship, self).__init__(globals.resources[Resources.Image_Ship_Module_Base],
-                                   batch=globals.sprite_batches[BatchNames.Player_Ship_Batch], *args, **kwargs)
+                                   batch=batch, *args, **kwargs)
+
         self.x = 100.0
         self.y = 100.0
 
@@ -34,12 +40,21 @@ class Ship(pyglet.sprite.Sprite):
         :return:
         """
         for mod in self.modules:
-            mod.module_action(dt)
+            mod.update(dt)
 
         if self.is_enemy:
             if self.get_health() < 0:
                 print("enemy killed")
                 self.alive = False
+                # drop components
+                for module in self.modules:
+                    module._local_x = 0
+                    module._local_y = 0
+                    # module.x = module._owner.x
+                    # module.y = module._owner.y
+                    module._owner = None
+                    globals.components.append(module)
+                self.modules = None
 
     def upgrade(self, sm):
         sm.module_initial()

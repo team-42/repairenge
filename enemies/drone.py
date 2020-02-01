@@ -12,7 +12,7 @@ class Drone(ship.Ship):
         self.y = y
         self.engine_power = self.engine_power / 2.0
         self.time = random.random() * 2.0 * 3.1415
-        self.base_health = 30
+        self.base_health = 5
 
         # just add 1 simple phaser in front of the ship :)
         phaser = smsp.ShipComponentSimplePhaser(-16, 0, self)

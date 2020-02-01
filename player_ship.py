@@ -11,13 +11,13 @@ class PlayerShip(ship.Ship):
         # just add 5 simple phaser in front of the ship :)
         self.modules.append(smsp.ShipComponentSimplePhaser(16, 0, self))
 
-        self.modules.append(smsp.ShipComponentSimplePhaser(12, -8, self))
-        self.modules.append(smsp.ShipComponentSimplePhaser(8, -16, self))
-        self.modules.append(smsp.ShipComponentSimplePhaser(4, -24, self))
+        #self.modules.append(smsp.ShipComponentSimplePhaser(12, -8, self))
+        #self.modules.append(smsp.ShipComponentSimplePhaser(8, -16, self))
+        #self.modules.append(smsp.ShipComponentSimplePhaser(4, -24, self))
 
-        self.modules.append(smsp.ShipComponentSimplePhaser(12, 8, self))
-        self.modules.append(smsp.ShipComponentSimplePhaser(8, 16, self))
-        self.modules.append(smsp.ShipComponentSimplePhaser(4, 24, self))
+        #self.modules.append(smsp.ShipComponentSimplePhaser(12, 8, self))
+        #self.modules.append(smsp.ShipComponentSimplePhaser(8, 16, self))
+        #self.modules.append(smsp.ShipComponentSimplePhaser(4, 24, self))
 
     def update(self, dt):
         """

@@ -20,18 +20,19 @@ class ShipComponentSimplePhaser(ship_component.ShipComponent):
     def module_initial(self, ship):
         ship.mass += self.mass
 
-    def module_action(self, dt):
-        super(ShipComponentSimplePhaser, self).module_action(dt)
+    def update(self, dt):
+        super(ShipComponentSimplePhaser, self).update(dt)
         self.ts_check_fire -= dt
         if self.ts_check_fire <= 0:
             self.ts_check_fire = self.cd - 0.01 + 0.02 * random.random()
 
             # check: is this phaser from the player or an enemy?
-            if self._owner.is_enemy:
-                globals.enemy_projectiles.append(
-                    ProjectileLaser(self._owner.x + self._local_x, self._owner.y + self._local_y, -1)
-                )
-            else:
-                globals.player_projectiles.append(
-                    ProjectileLaser(self._owner.x + self._local_x, self._owner.y + self._local_y, 1)
-                )
+            if self._owner is not None:
+                if self._owner.is_enemy:
+                    globals.enemy_projectiles.append(
+                        ProjectileLaser(self._owner.x + self._local_x, self._owner.y + self._local_y, -1)
+                    )
+                else:
+                    globals.player_projectiles.append(
+                        ProjectileLaser(self._owner.x + self._local_x, self._owner.y + self._local_y, 1)
+                    )

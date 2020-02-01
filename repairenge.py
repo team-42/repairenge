@@ -90,8 +90,9 @@ class Repairenge:
                 # delete the sprite and vertices from the batch
                 list_of_things[i].delete()
                 if hasattr(list_of_things[i], 'modules'):
-                    for module in list_of_things[i].modules:
-                        module.delete()
+                    if list_of_things[i].modules is not None:
+                        for module in list_of_things[i].modules:
+                            module.delete()
                 if i == len(list_of_things) - 1:
                     list_of_things.pop()
                 else:
@@ -145,6 +146,14 @@ class Repairenge:
         # 3: player_ship vs enemies
         for enemy in globals.enemies:
             self.check_collision_between_ships(globals.player_ship, enemy, dt)
+
+        # 4: player_ship vs free components
+        for module in globals.components:
+            if util.is_colliding(module, globals.player_ship):
+                module._local_x = module.x - globals.player_ship.x
+                module._local_y = module.y - globals.player_ship.y
+                module._owner = globals.player_ship
+                module.alive = False
 
         globals.player_ship.update(dt)
 
