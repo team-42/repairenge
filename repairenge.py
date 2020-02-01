@@ -22,6 +22,7 @@ CONDITION_LOSS = -1
 CONDITION_WIN = -2
 NUM_ENEMIES_TO_DEFEAT = 3
 
+# raw_names on ps4 controller
 controls_to_follow = ["ABS_RX", "ABS_RY", "ABS_X", "ABS_Y", "BTN_TL", "BTN_TR", "BTN_TL2", "BTN_TR2", "BTN_A", "BTN_B",
                       "BTN_Y", "BTN_X"]
 
@@ -248,6 +249,8 @@ class Repairenge:
             globals.controls[Controls.Right] = True
         elif symbol == key.E:
             globals.controls[Controls.Action_0] = True
+        elif symbol == key.Q:
+            globals.controls[Controls.Action_1] = True
 
     def on_key_release(self, symbol, modifiers):
         """
@@ -266,6 +269,8 @@ class Repairenge:
             globals.controls[Controls.Right] = False
         elif symbol == key.E:
             globals.controls[Controls.Action_0] = False
+        elif symbol == key.Q:
+            globals.controls[Controls.Action_1] = False
 
     # Checks for win and loss of the game
     def update_game_condition(self):
@@ -323,11 +328,15 @@ def watch_control(device, control):
         def on_press():
             if control.raw_name == "BTN_A":
                 globals.controls[Controls.Action_0] = True
+            elif control.raw_name == "BTN_B":
+                globals.controls[Controls.Action_1] = True
 
         @control.event
         def on_release():
             if control.raw_name == "BTN_A":
                 globals.controls[Controls.Action_0] = False
+            elif control.raw_name == "BTN_B":
+                globals.controls[Controls.Action_1] = False
 
 
 # search for ps4 controller (or other things with controller in its name)

@@ -19,10 +19,10 @@ components = []
 # 0 -> no button pressed
 # 1 -> button is pressed
 controls = {Controls.Up: False, Controls.Down: False, Controls.Left: False, Controls.Right: False,
-            Controls.Action_0: False}
+            Controls.Action_0: False, Controls.Action_1: False}
 # the players ship
 player_ship = None  # ship.Ship()
-defeated_enemies:int = 0
+defeated_enemies: int = 0
 
 # resources
 resources = {}

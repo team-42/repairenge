@@ -9,6 +9,8 @@ class Controls(Enum):
     Right = "r"
     # Key: E or X(Noobstick)
     Action_0 = "0"
+    # Key: Q or O on noobstick
+    Action_1 = "1"
 
 
 class Resources(Enum):
@@ -30,4 +32,3 @@ class BatchNames(Enum):
 class LaserColors(Enum):
     Player_Ship = (80, 80, 255)
     Enemy_Ship = (255, 122, 65)
-
