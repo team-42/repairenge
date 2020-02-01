@@ -12,11 +12,14 @@ import util
 from constants import BatchNames
 from constants import Controls
 from constants import Resources
+from enemies.boss import Boss
 
 CONDITION_RUNNING = 1
-CONDITION_LOSS = 2
-CONDITION_WIN = 3
-NUM_ENEMIES_TO_DEFEAT = 5
+CONDITION_SPAWN_BOSS = 2
+CONDITION_BOSS = 3
+CONDITION_LOSS = -1
+CONDITION_WIN = -2
+NUM_ENEMIES_TO_DEFEAT = 3
 
 controls_to_follow = ["ABS_RX", "ABS_RY", "ABS_X", "ABS_Y", "BTN_TL", "BTN_TR", "BTN_TL2", "BTN_TR2", "BTN_A", "BTN_B",
                       "BTN_Y", "BTN_X"]
@@ -45,6 +48,7 @@ class Repairenge:
     victory_label: Label
     game_over_label: Label
     game_condition: int = CONDITION_RUNNING
+    boss: Boss
 
     def __init__(self, window, devices, keyboard):
 
@@ -167,7 +171,7 @@ class Repairenge:
         :param dt:
         :return:
         """
-        if self.game_condition != CONDITION_RUNNING:
+        if self.game_condition < CONDITION_RUNNING:
             return
         # print(self.controls)
         self._starfield.update(dt)
@@ -206,8 +210,14 @@ class Repairenge:
 
         # randomly add enemies:
         if random.random() < dt * 0.5:
-            drone = enemies.drone.Drone(1010, random.random() * 200 + 400)
-            globals.enemies.append(drone)
+            if self.game_condition == CONDITION_RUNNING:
+                drone = enemies.drone.Drone(1010, random.random() * 200 + 400)
+                globals.enemies.append(drone)
+            elif self.game_condition == CONDITION_SPAWN_BOSS:
+                self.boss = Boss(1010, random.random() * 200 + 400)
+                globals.enemies.append(self.boss)
+                print("Game condition has changed to BOSS")
+                self.game_condition = CONDITION_BOSS
 
         self.update_game_condition()
 
@@ -249,14 +259,17 @@ class Repairenge:
 
     # Checks for win and loss of the game
     def update_game_condition(self):
-        if self.game_condition == CONDITION_RUNNING:
+        if self.game_condition >= CONDITION_RUNNING:
             loss = globals.player_ship.get_health() <= 0
-            win = globals.defeated_enemies >= NUM_ENEMIES_TO_DEFEAT
+            boss = globals.defeated_enemies >= NUM_ENEMIES_TO_DEFEAT and self.game_condition == CONDITION_RUNNING
             if loss:
                 self.game_condition = CONDITION_LOSS
                 player_ship.alive = False
                 print("Game condition has changed to LOSS")
-            elif win:
+            elif boss:
+                self.game_condition = CONDITION_SPAWN_BOSS
+                print("Game condition has changed to SPAWN_BOSS")
+            if self.game_condition == CONDITION_BOSS:
                 self.game_condition = CONDITION_WIN
                 print("Game condition has changed to WIN")
 
