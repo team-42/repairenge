@@ -75,7 +75,6 @@ class Ship(pyglet.sprite.Sprite):
             self.grid[slot] = 1
             sm.module_initial(self)
             self.modules.append(sm)
-            print("grid: {}, {}".format(len(self.grid), self.grid))
 
     def get_health(self):
         return self.get_max_health() - self.damage_taken

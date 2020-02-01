@@ -194,11 +194,8 @@ class Repairenge:
                     else:
                         y_dir = 1 if distance_y < 0 else -1
 
-                    print("dir: {}-{}".format(x_dir, y_dir))
                     new_x = slot[0] + x_dir
                     new_y = slot[1] + y_dir
-
-                    print("new slot: {}-{}".format(new_x, new_y))
 
                     module._local_x = new_x
                     module._local_y = new_y
