@@ -22,6 +22,7 @@ controls = {Controls.Up: False, Controls.Down: False, Controls.Left: False, Cont
             Controls.Action_0: False}
 # the players ship
 player_ship = None  # ship.Ship()
+defeated_enemies:int = 0
 
 # resources
 resources = {}

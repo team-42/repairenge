@@ -44,7 +44,8 @@ class Ship(pyglet.sprite.Sprite):
 
         if self.is_enemy:
             if self.get_health() < 0:
-                print("enemy killed")
+                globals.defeated_enemies += 1
+                print("enemy killed ({})".format(globals.defeated_enemies))
                 self.alive = False
                 # drop components
                 for module in self.modules:

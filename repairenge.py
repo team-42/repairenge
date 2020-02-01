@@ -1,6 +1,7 @@
 import random
 
 import pyglet
+from pyglet.text import Label
 from pyglet.window import key
 
 import enemies.drone
@@ -15,6 +16,7 @@ from constants import Resources
 CONDITION_RUNNING = 1
 CONDITION_LOSS = 2
 CONDITION_WIN = 3
+NUM_ENEMIES_TO_DEFEAT = 5
 
 controls_to_follow = ["ABS_RX", "ABS_RY", "ABS_X", "ABS_Y", "BTN_TL", "BTN_TR", "BTN_TL2", "BTN_TR2", "BTN_A", "BTN_B",
                       "BTN_Y", "BTN_X"]
@@ -35,11 +37,13 @@ class Repairenge:
     """
     main class with update, draw ...
     """
+    victory_label: Label
+    game_over_label: Label
     game_condition: int = CONDITION_RUNNING
 
     def __init__(self, window, devices, keyboard):
 
-        # first: load resources
+        # first: load resourcess
         self._load_resources()
 
         self._window = window
@@ -51,6 +55,19 @@ class Repairenge:
 
         # the background starfield
         self._starfield = starfield.StarField(100)
+
+        self.game_over_label = pyglet.text.Label('Game Over',
+                                                 font_name='Arial',
+                                                 font_size=60,
+                                                 color=(190, 0, 50, 255),
+                                                 x=window.width // 2, y=window.height // 2,
+                                                 anchor_x='center', anchor_y='center')
+        self.victory_label = pyglet.text.Label('Victory',
+                                               font_name='Arial',
+                                               font_size=60,
+                                               color=(0, 136, 86, 255),
+                                               x=window.width // 2, y=window.height // 2,
+                                               anchor_x='center', anchor_y='center')
 
     def _load_resources(self):
         """
@@ -83,7 +100,9 @@ class Repairenge:
             # print(key)
             batch.draw()
         if self.game_condition == CONDITION_LOSS:
-            gameOverLabel.draw()
+            self.game_over_label.draw()
+        if self.game_condition == CONDITION_WIN:
+            self.victory_label.draw()
 
     def _update_and_delete(self, list_of_things, dt):
         """
@@ -227,6 +246,10 @@ class Repairenge:
                 self.game_condition = CONDITION_LOSS
                 player_ship.alive = False
                 print("Game condition has changed to LOSS")
+            win = globals.defeated_enemies >= NUM_ENEMIES_TO_DEFEAT
+            if win:
+                self.game_condition = CONDITION_WIN
+                print("Game condition has changed to WIN")
 
 
 repairenge = Repairenge(window, devices, keyboard)
@@ -295,14 +318,6 @@ for device in devices:
 
 def update(dt):
     repairenge.update(dt)
-
-
-gameOverLabel = pyglet.text.Label('Game Over',
-                                  font_name='Arial',
-                                  font_size=60,
-                                  color=(190, 0, 50, 255),
-                                  x=window.width // 2, y=window.height // 2,
-                                  anchor_x='center', anchor_y='center')
 
 
 @window.event
