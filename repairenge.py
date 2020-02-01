@@ -36,11 +36,6 @@ window.push_handlers(keyboard)
 
 devices = pyglet.input.get_devices()
 
-play = pyglet.media.load('resources/music/complete.mp3')
-player = pyglet.media.Player()
-player.queue(play)
-player.loop = True
-player.play()
 
 class Repairenge:
     """
