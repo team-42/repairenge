@@ -1,6 +1,6 @@
 import pyglet
 from pyglet.window import key
-import ship
+import player_ship
 import starfield
 from constants import Controls
 from constants import Resources
@@ -37,7 +37,7 @@ class Repairenge:
         self._keyboard = keyboard
 
         # the players ship
-        globals.player_ship = ship.Ship()
+        globals.player_ship = player_ship.PlayerShip()
 
         # the background starfield
         self._starfield = starfield.StarField(100)
@@ -71,7 +71,7 @@ class Repairenge:
         """
         print()
         for key, batch in globals.sprite_batches.items():
-            #print(key)
+            # print(key)
             batch.draw()
 
     def _update_and_delete(self, list_of_things, dt):
