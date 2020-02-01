@@ -60,7 +60,7 @@ class Ship(pyglet.sprite.Sprite):
                 self.alive = False
                 # drop components
                 for module in self.modules:
-                    if random.random() < 0.1:
+                    if random.random() < 0.5:
                         module._local_x = 0
                         module._local_y = 0
                         module._owner = None
