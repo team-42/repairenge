@@ -21,7 +21,7 @@ CONDITION_SPAWN_BOSS = 2
 CONDITION_BOSS = 3
 CONDITION_LOSS = -1
 CONDITION_WIN = -2
-NUM_ENEMIES_TO_DEFEAT = 3
+NUM_ENEMIES_TO_DEFEAT = 20
 
 # raw_names on ps4 controller
 controls_to_follow = ["ABS_RX", "ABS_RY", "ABS_X", "ABS_Y", "BTN_TL", "BTN_TR", "BTN_TL2", "BTN_TR2", "BTN_A", "BTN_B",

@@ -2,6 +2,7 @@ import pyglet
 import globals
 from constants import Resources
 from constants import BatchNames
+import random
 
 
 class Ship(pyglet.sprite.Sprite):
@@ -59,10 +60,11 @@ class Ship(pyglet.sprite.Sprite):
                 self.alive = False
                 # drop components
                 for module in self.modules:
-                    module._local_x = 0
-                    module._local_y = 0
-                    module._owner = None
-                    globals.components.append(module)
+                    if random.random() < 0.1:
+                        module._local_x = 0
+                        module._local_y = 0
+                        module._owner = None
+                        globals.components.append(module)
                 self.modules = None
 
     def upgrade(self, sm):
