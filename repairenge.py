@@ -87,6 +87,11 @@ class Repairenge:
         while i < len(list_of_things):
             list_of_things[i].update(dt)
             if not list_of_things[i].alive:
+                # delete the sprite and vertices from the batch
+                list_of_things[i].delete()
+                if hasattr(list_of_things[i], 'modules'):
+                    for module in list_of_things[i].modules:
+                        module.delete()
                 if i == len(list_of_things) - 1:
                     list_of_things.pop()
                 else:
