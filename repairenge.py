@@ -36,16 +36,19 @@ class Repairenge:
         image = pyglet.resource.image("resources/ship/base.png")
         self._ship = ship.Ship(image)
         self._starfield = starfield.StarField(100)
+        self._projectiles = []
         self._shipmodules = []
 
     def draw(self):
 
         self._starfield.draw()
+        for projectile in self._projectiles:
+            projectile.draw()
         self._ship.draw()
         # self._shipmodules.draw()
 
     def update(self, dt):
-        print(self.controls)
+        # print(self.controls)
         self._starfield.update(dt)
         self._ship.update(dt, self.controls)
         for shipmodule in self._shipmodules:

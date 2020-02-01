@@ -15,7 +15,7 @@ class Ship(pyglet.sprite.Sprite):
         self.current_health = self.base_health * self.health_multiplier
 
         # ship movement properties
-        self.engine_power = 100.0
+        self.engine_power = 1000.0
         self.mass = 1.0
 
         # modules
