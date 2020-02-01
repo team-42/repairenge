@@ -47,15 +47,15 @@ class Ship(pyglet.sprite.Sprite):
                 globals.defeated_enemies += 1
                 print("enemy killed ({})".format(globals.defeated_enemies))
                 self.alive = False
-                # drop components
-                for module in self.modules:
-                    module._local_x = 0
-                    module._local_y = 0
-                    # module.x = module._owner.x
-                    # module.y = module._owner.y
-                    module._owner = None
-                    globals.components.append(module)
-                self.modules = None
+                # # drop components
+                # for module in self.modules:
+                #     module._local_x = 0
+                #     module._local_y = 0
+                #     # module.x = module._owner.x
+                #     # module.y = module._owner.y
+                #     module._owner = None
+                #     globals.components.append(module)
+                # self.modules = None
 
     def upgrade(self, sm):
         sm.module_initial(self)
