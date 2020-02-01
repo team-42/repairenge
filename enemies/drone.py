@@ -15,7 +15,7 @@ class Drone(ship.Ship):
         self.base_health = 30
 
         # just add 1 simple phaser in front of the ship :)
-        laser = smsp.ShipComponentLaser(-16, 0, self, smsp.LaserType.SimpleLaser)
+        laser = smsp.ShipComponentLaser(-2, 0, self, smsp.LaserType.SimpleLaser)
         self.upgrade(laser)
 
     def update(self, dt):

@@ -42,6 +42,9 @@ class ShipComponentLaser(ship_component.ShipComponent):
 
     def update(self, dt):
         super(ShipComponentLaser, self).update(dt)
+        if self._owner is None:
+            return
+        
         self.ts_check_fire -= dt
         if self.ts_check_fire <= 0:
             self.ts_check_fire = self.cd - 0.01 + 0.02 * random.random()

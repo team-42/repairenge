@@ -23,6 +23,14 @@ class Ship(pyglet.sprite.Sprite):
         self.is_enemy = is_enemy
         self.alive = True
 
+        # component grid:
+        # uses 2-tuples as indices
+        # value == 1 -> reserved for base model
+        self.grid = {
+            (0, 0): 1,
+            (0, -1): 1
+        }
+
         # Health Segment
         self.base_health = 200
         self.health_multiplier = 1.0
@@ -49,19 +57,25 @@ class Ship(pyglet.sprite.Sprite):
                 globals.defeated_enemies += 1
                 print("enemy killed ({})".format(globals.defeated_enemies))
                 self.alive = False
-                # # drop components
-                # for module in self.modules:
-                #     module._local_x = 0
-                #     module._local_y = 0
-                #     # module.x = module._owner.x
-                #     # module.y = module._owner.y
-                #     module._owner = None
-                #     globals.components.append(module)
-                # self.modules = None
+                # drop components
+                for module in self.modules:
+                    module._local_x = 0
+                    module._local_y = 0
+                    module._owner = None
+                    globals.components.append(module)
+                self.modules = None
 
     def upgrade(self, sm):
-        sm.module_initial(self)
-        self.modules.append(sm)
+        # only add it to the ship if the corresponding slot is free
+        slot = (int(sm._local_x), int(sm._local_y))
+        if slot not in self.grid:
+            # calculate the local coordinates for the slot
+            sm._local_x *= 32
+            sm._local_y *= 32
+            self.grid[slot] = 1
+            sm.module_initial(self)
+            self.modules.append(sm)
+            print("grid: {}, {}".format(len(self.grid), self.grid))
 
     def get_health(self):
         return (self.base_health * self.health_multiplier) - self.damage_taken

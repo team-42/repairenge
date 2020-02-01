@@ -14,6 +14,7 @@ from constants import BatchNames
 from constants import Controls
 from constants import Resources
 from enemies.boss import Boss
+import math
 
 CONDITION_RUNNING = 1
 CONDITION_SPAWN_BOSS = 2
@@ -174,6 +175,42 @@ class Repairenge:
                 print("dmg for a: {}".format(dmg_for_a))
                 print("dmg for b: {}".format(dmg_for_b))
 
+    def check_collision_between_player_and_components(self):
+        # dont touch this
+        i = 0
+        while i < len(globals.components):
+            module = globals.components[i]
+            # check collision with each slot of player
+            for slot in globals.player_ship.grid:
+                # calc distance
+                distance_x = globals.player_ship.x + (slot[0] * 32) - module.x
+                distance_y = globals.player_ship.y + (slot[1] * 32) - module.y
+                if distance_x > -32 and distance_x < 32 and distance_y > -32 and distance_y < 32:
+                    # calculate slot to attach to
+                    x_dir = 0
+                    y_dir = 0
+                    if abs(distance_x) > abs(distance_y):
+                        x_dir = 1 if distance_x < 0 else -1
+                    else:
+                        y_dir = 1 if distance_y < 0 else -1
+
+                    print("dir: {}-{}".format(x_dir, y_dir))
+                    new_x = slot[0] + x_dir
+                    new_y = slot[1] + y_dir
+
+                    print("new slot: {}-{}".format(new_x, new_y))
+
+                    module._local_x = new_x
+                    module._local_y = new_y
+                    module._owner = globals.player_ship
+                    globals.player_ship.upgrade(module)
+                    if i == len(globals.components) - 1:
+                        globals.components.pop()
+                    else:
+                        globals.components[i] = globals.components.pop()
+                    break
+            i += 1
+
     def update(self, dt):
         """
         main update method - called once per frame - for game logic
@@ -198,12 +235,7 @@ class Repairenge:
             self.check_collision_between_ships(globals.player_ship, enemy, dt)
 
         # 4: player_ship vs free components
-        for module in globals.components:
-            if util.is_colliding(module, globals.player_ship):
-                module._local_x = module.x - globals.player_ship.x
-                module._local_y = module.y - globals.player_ship.y
-                module._owner = globals.player_ship
-                module.alive = False
+        self.check_collision_between_player_and_components()
 
         globals.player_ship.update(dt)
 
