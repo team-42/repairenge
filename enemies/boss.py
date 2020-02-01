@@ -33,7 +33,8 @@ class Boss(ship.Ship):
         # fly up and down
         self.y += math.sin(self.time) * self.engine_power / self.mass * dt
         # fly to the left
-        self.x -= 0.5 * self.engine_power / self.mass * dt
+        if self.x > 750:
+            self.x -= 0.5 * self.engine_power / self.mass * dt
 
         super(Boss, self).update(dt)
 
