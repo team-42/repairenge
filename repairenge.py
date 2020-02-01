@@ -1,14 +1,20 @@
+import random
+
 import pyglet
 from pyglet.window import key
+
+import enemies.drone
+import globals
 import player_ship
 import starfield
+import util
+from constants import BatchNames
 from constants import Controls
 from constants import Resources
-from constants import BatchNames
-import globals
-import enemies.drone
-import random
-import util
+
+CONDITION_RUNNING = 1
+CONDITION_LOSS = 2
+CONDITION_WIN = 3
 
 controls_to_follow = ["ABS_RX", "ABS_RY", "ABS_X", "ABS_Y", "BTN_TL", "BTN_TR", "BTN_TL2", "BTN_TR2", "BTN_A", "BTN_B",
                       "BTN_Y", "BTN_X"]
@@ -29,6 +35,7 @@ class Repairenge:
     """
     main class with update, draw ...
     """
+    game_condition: int = CONDITION_RUNNING
 
     def __init__(self, window, devices, keyboard):
 
@@ -75,6 +82,8 @@ class Repairenge:
         for key, batch in globals.sprite_batches.items():
             # print(key)
             batch.draw()
+        if self.game_condition == CONDITION_LOSS:
+            gameOverLabel.draw()
 
     def _update_and_delete(self, list_of_things, dt):
         """
@@ -172,6 +181,8 @@ class Repairenge:
             drone = enemies.drone.Drone(1010, random.random() * 200 + 400)
             globals.enemies.append(drone)
 
+        self.update_game_condition()
+
     def on_key_press(self, symbol, modifiers):
         """
         for keyboard presses
@@ -207,6 +218,15 @@ class Repairenge:
             globals.controls[Controls.Right] = False
         elif symbol == key.E:
             globals.controls[Controls.Action_0] = False
+
+    # Checks for win and loss of the game
+    def update_game_condition(self):
+        if self.game_condition == CONDITION_RUNNING:
+            loss = globals.player_ship.get_health() <= 0
+            if loss:
+                self.game_condition = CONDITION_LOSS
+                player_ship.alive = False
+                print("Game condition has changed to LOSS")
 
 
 repairenge = Repairenge(window, devices, keyboard)
@@ -275,6 +295,14 @@ for device in devices:
 
 def update(dt):
     repairenge.update(dt)
+
+
+gameOverLabel = pyglet.text.Label('Game Over',
+                                  font_name='Arial',
+                                  font_size=60,
+                                  color=(190, 0, 50, 255),
+                                  x=window.width // 2, y=window.height // 2,
+                                  anchor_x='center', anchor_y='center')
 
 
 @window.event

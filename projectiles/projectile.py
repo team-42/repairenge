@@ -9,8 +9,4 @@ class Projectile(pyglet.sprite.Sprite):
         self.alive = True
 
     def update(self, dt):
-        self.x = self.x + self.speed * dt
-
-        # check if this is outside the screen
-        if self.x > 1050 or self.x < -50 or self.y < -50 or self.y > 850:
-            self.alive = False
+        pass
