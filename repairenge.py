@@ -41,13 +41,13 @@ class Repairenge:
     def draw(self):
 
         self._starfield.draw()
-        # self._ship.draw()
+        self._ship.draw()
         # self._shipmodules.draw()
 
     def update(self, dt):
-        #print(self.controls)
+        print(self.controls)
         self._starfield.update(dt)
-        self._ship.update(dt)
+        self._ship.update(dt, self.controls)
         for shipmodule in self._shipmodules:
             shipmodule.update(dt)
 
@@ -58,13 +58,13 @@ class Repairenge:
         :param modifiers:
         :return:
         """
-        if symbol == key.UP:
+        if symbol == key.W:
             self.controls['up'] = True
-        elif symbol == key.DOWN:
+        elif symbol == key.S:
             self.controls['down'] = True
-        elif symbol == key.LEFT:
+        elif symbol == key.A:
             self.controls['left'] = True
-        elif symbol == key.RIGHT:
+        elif symbol == key.D:
             self.controls['right'] = True
         elif symbol == key.E:
             self.controls['action_0'] = True
@@ -76,13 +76,13 @@ class Repairenge:
         :param modifiers:
         :return:
         """
-        if symbol == key.UP:
+        if symbol == key.W:
             self.controls['up'] = False
-        elif symbol == key.DOWN:
+        elif symbol == key.S:
             self.controls['down'] = False
-        elif symbol == key.LEFT:
+        elif symbol == key.A:
             self.controls['left'] = False
-        elif symbol == key.RIGHT:
+        elif symbol == key.D:
             self.controls['right'] = False
         elif symbol == key.E:
             self.controls['action_0'] = False

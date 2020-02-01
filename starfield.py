@@ -8,12 +8,14 @@ class Star(pyglet.sprite.Sprite):
 
         # In addition to position, we have velocity
         self.velocity_x = random.random() * 100
+        self.scale = self.velocity_x * 0.02
 
     def update(self, dt):
         self.x = self.x - dt * self.velocity_x
         if self.x < -50:
             self.x = 1000
             self.velocity_x = random.random() * 100
+            self.scale = self.velocity_x * 0.02
 
 
 class StarField:
