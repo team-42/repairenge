@@ -1,5 +1,4 @@
 import ship
-import globals
 import ship_components.ship_component_simple_phaser as smsp
 import math
 import random

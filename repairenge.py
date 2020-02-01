@@ -8,6 +8,7 @@ from constants import BatchNames
 import globals
 import enemies.drone
 import random
+import util
 
 controls_to_follow = ["ABS_RX", "ABS_RY", "ABS_X", "ABS_Y", "BTN_TL", "BTN_TR", "BTN_TL2", "BTN_TR2", "BTN_A", "BTN_B",
                       "BTN_Y", "BTN_X"]
@@ -93,6 +94,32 @@ class Repairenge:
             else:
                 i += 1
 
+    def check_collisions_with_projectiles(self, ship, projectiles):
+        for projectile in projectiles:
+            if projectile.alive:
+                hit = False
+                if util.is_colliding(projectile, ship):
+                    hit = True
+                if not hit:
+                    for component in ship.modules:
+                        if util.is_colliding(projectile, component):
+                            hit = True
+                            break
+                if hit:
+                    projectile.alive = False
+                    ship.damage(projectile.damage)
+                    print("ship.health = {}".format(ship.get_health()))
+
+    def check_collision_between_ships(self, ship_a, ship_b, dt):
+        if ship_a.alive and ship_b.alive:
+            if util.is_colliding(ship_a, ship_b):
+                dmg_for_a = ship_b.mass * ship_b.engine_power * dt
+                dmg_for_b = ship_a.mass * ship_a.engine_power * dt
+                ship_a.damage(dmg_for_a)
+                ship_b.damage(dmg_for_b)
+                print("dmg for a: {}".format(dmg_for_a))
+                print("dmg for b: {}".format(dmg_for_b))
+
     def update(self, dt):
         """
         main update method - called once per frame - for game logic
@@ -101,6 +128,18 @@ class Repairenge:
         """
         # print(self.controls)
         self._starfield.update(dt)
+
+        # do collision detection
+        # 1: player_ship vs enemy_projectiles
+        self.check_collisions_with_projectiles(globals.player_ship, globals.enemy_projectiles)
+
+        # 2: enemies vs player_projectiles
+        for enemy in globals.enemies:
+            self.check_collisions_with_projectiles(enemy, globals.player_projectiles)
+
+        # 3: player_ship vs enemies
+        for enemy in globals.enemies:
+            self.check_collision_between_ships(globals.player_ship, enemy, dt)
 
         globals.player_ship.update(dt)
 
