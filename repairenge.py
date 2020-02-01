@@ -1,13 +1,20 @@
+import random
+
 import pyglet
 from pyglet.window import key
+
+import enemies.drone
+import globals
 import player_ship
 import starfield
+import util
+from constants import BatchNames
 from constants import Controls
 from constants import Resources
-from constants import BatchNames
-import globals
-import enemies.drone
-import random
+
+CONDITION_RUNNING = 1
+CONDITION_LOSS = 2
+CONDITION_WIN = 3
 
 controls_to_follow = ["ABS_RX", "ABS_RY", "ABS_X", "ABS_Y", "BTN_TL", "BTN_TR", "BTN_TL2", "BTN_TR2", "BTN_A", "BTN_B",
                       "BTN_Y", "BTN_X"]
@@ -28,6 +35,7 @@ class Repairenge:
     """
     main class with update, draw ...
     """
+    game_condition: int = CONDITION_RUNNING
 
     def __init__(self, window, devices, keyboard):
 
@@ -74,6 +82,8 @@ class Repairenge:
         for key, batch in globals.sprite_batches.items():
             # print(key)
             batch.draw()
+        if self.game_condition == CONDITION_LOSS:
+            gameOverLabel.draw()
 
     def _update_and_delete(self, list_of_things, dt):
         """
@@ -86,12 +96,43 @@ class Repairenge:
         while i < len(list_of_things):
             list_of_things[i].update(dt)
             if not list_of_things[i].alive:
+                # delete the sprite and vertices from the batch
+                list_of_things[i].delete()
+                if hasattr(list_of_things[i], 'modules'):
+                    for module in list_of_things[i].modules:
+                        module.delete()
                 if i == len(list_of_things) - 1:
                     list_of_things.pop()
                 else:
                     list_of_things[i] = list_of_things.pop()
             else:
                 i += 1
+
+    def check_collisions_with_projectiles(self, ship, projectiles):
+        for projectile in projectiles:
+            if projectile.alive:
+                hit = False
+                if util.is_colliding(projectile, ship):
+                    hit = True
+                if not hit:
+                    for component in ship.modules:
+                        if util.is_colliding(projectile, component):
+                            hit = True
+                            break
+                if hit:
+                    projectile.alive = False
+                    ship.damage(projectile.damage)
+                    print("ship.health = {}".format(ship.get_health()))
+
+    def check_collision_between_ships(self, ship_a, ship_b, dt):
+        if ship_a.alive and ship_b.alive:
+            if util.is_colliding(ship_a, ship_b):
+                dmg_for_a = ship_b.mass * ship_b.engine_power * dt
+                dmg_for_b = ship_a.mass * ship_a.engine_power * dt
+                ship_a.damage(dmg_for_a)
+                ship_b.damage(dmg_for_b)
+                print("dmg for a: {}".format(dmg_for_a))
+                print("dmg for b: {}".format(dmg_for_b))
 
     def update(self, dt):
         """
@@ -101,6 +142,18 @@ class Repairenge:
         """
         # print(self.controls)
         self._starfield.update(dt)
+
+        # do collision detection
+        # 1: player_ship vs enemy_projectiles
+        self.check_collisions_with_projectiles(globals.player_ship, globals.enemy_projectiles)
+
+        # 2: enemies vs player_projectiles
+        for enemy in globals.enemies:
+            self.check_collisions_with_projectiles(enemy, globals.player_projectiles)
+
+        # 3: player_ship vs enemies
+        for enemy in globals.enemies:
+            self.check_collision_between_ships(globals.player_ship, enemy, dt)
 
         globals.player_ship.update(dt)
 
@@ -118,6 +171,8 @@ class Repairenge:
         if random.random() < dt * 0.5:
             drone = enemies.drone.Drone(1010, random.random() * 200 + 400)
             globals.enemies.append(drone)
+
+        self.update_game_condition()
 
     def on_key_press(self, symbol, modifiers):
         """
@@ -154,6 +209,15 @@ class Repairenge:
             globals.controls[Controls.Right] = False
         elif symbol == key.E:
             globals.controls[Controls.Action_0] = False
+
+    # Checks for win and loss of the game
+    def update_game_condition(self):
+        if self.game_condition == CONDITION_RUNNING:
+            loss = globals.player_ship.get_health() <= 0
+            if loss:
+                self.game_condition = CONDITION_LOSS
+                player_ship.alive = False
+                print("Game condition has changed to LOSS")
 
 
 repairenge = Repairenge(window, devices, keyboard)
@@ -222,6 +286,14 @@ for device in devices:
 
 def update(dt):
     repairenge.update(dt)
+
+
+gameOverLabel = pyglet.text.Label('Game Over',
+                                  font_name='Arial',
+                                  font_size=60,
+                                  color=(190, 0, 50, 255),
+                                  x=window.width // 2, y=window.height // 2,
+                                  anchor_x='center', anchor_y='center')
 
 
 @window.event

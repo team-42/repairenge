@@ -36,6 +36,11 @@ class Ship(pyglet.sprite.Sprite):
         for mod in self.modules:
             mod.module_action(dt)
 
+        if self.is_enemy:
+            if self.get_health() < 0:
+                print("enemy killed")
+                self.alive = False
+
     def upgrade(self, sm):
         sm.module_initial()
         self.modules.append(sm)
