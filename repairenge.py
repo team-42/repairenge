@@ -37,7 +37,7 @@ window.push_handlers(keyboard)
 
 devices = pyglet.input.get_devices()
 
-play = pyglet.media.load('resources/music/complete.mp3')
+play = pyglet.media.load('resources/music/complete.wav')
 player = pyglet.media.Player()
 player.queue(play)
 player.loop = True
