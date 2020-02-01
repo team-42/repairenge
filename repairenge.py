@@ -26,9 +26,8 @@ controls_to_follow = ["ABS_RX", "ABS_RY", "ABS_X", "ABS_Y", "BTN_TL", "BTN_TR", 
                       "BTN_Y", "BTN_X"]
 
 # create the window obj
-window = pyglet.window.Window(1000, 800)
-# window = pyglet.window.Window(fullscreen=True)
-# window.set_exclusive_mouse()
+window = pyglet.window.Window(1000, 768)
+globals.window = window
 
 # for keyboard input
 keyboard = key.KeyStateHandler()
@@ -65,13 +64,13 @@ class Repairenge:
                                                  font_name='Arial',
                                                  font_size=60,
                                                  color=(190, 0, 50, 255),
-                                                 x=window.width // 2, y=window.height // 2,
+                                                 x=globals.window.width // 2, y=globals.window.height // 2,
                                                  anchor_x='center', anchor_y='center')
         self.victory_label = pyglet.text.Label('Victory',
                                                font_name='Arial',
                                                font_size=60,
                                                color=(0, 136, 86, 255),
-                                               x=window.width // 2, y=window.height // 2,
+                                               x=globals.window.width // 2, y=globals.window.height // 2,
                                                anchor_x='center', anchor_y='center')
 
     def _load_resources(self):
@@ -211,10 +210,12 @@ class Repairenge:
         # randomly add enemies:
         if random.random() < dt * 0.5:
             if self.game_condition == CONDITION_RUNNING:
-                drone = enemies.drone.Drone(1010, random.random() * 200 + 400)
+                drone = enemies.drone.Drone(globals.window.width + 50,
+                                            random.random() * (globals.window.height / 4) + globals.window.height / 2)
                 globals.enemies.append(drone)
             elif self.game_condition == CONDITION_SPAWN_BOSS:
-                self.boss = Boss(1010, random.random() * 200 + 400)
+                self.boss = Boss(globals.window.width + 50,
+                                 random.random() * (globals.window.height / 4) + globals.window.height / 2)
                 globals.enemies.append(self.boss)
                 print("Game condition has changed to BOSS")
                 self.game_condition = CONDITION_BOSS

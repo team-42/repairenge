@@ -1,4 +1,5 @@
 from enum import Enum
+from enum import IntEnum
 
 
 class Controls(Enum):
@@ -25,6 +26,8 @@ class BatchNames(Enum):
     Player_Ship_Batch = 3
     Component_Batch = 4
 
+
 class LaserColors(Enum):
     Player_Ship = (80, 80, 255)
     Enemy_Ship = (255, 122, 65)
+

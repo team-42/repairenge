@@ -29,3 +29,5 @@ resources = {}
 
 # sprite batches
 sprite_batches = {}
+
+window = None

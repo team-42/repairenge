@@ -26,5 +26,5 @@ class ProjectileLaser(Projectile):
         self.y += self.speed * math.cos(rad) * dt
 
         # check if this is outside the screen
-        if self.x > 1050 or self.x < -50 or self.y < -50 or self.y > 850:
+        if self.x > globals.window.width or self.x < -50 or self.y < -50 or self.y > globals.window.height:
             self.alive = False

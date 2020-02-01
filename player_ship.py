@@ -36,5 +36,14 @@ class PlayerShip(ship.Ship):
         if globals.controls[Controls.Right]:
             self.x += self.engine_power / self.mass * dt
 
+        if self.x < 0:
+            self.x = 0
+        if self.y < 0:
+            self.y = 0
+        if self.x > globals.window.width:
+            self.x = globals.window.width
+        if self.y > globals.window.height:
+            self.y = globals.window.height
+
         # first superclass.update
         super(PlayerShip, self).update(dt)

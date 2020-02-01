@@ -16,8 +16,8 @@ class Ship(pyglet.sprite.Sprite):
         super(Ship, self).__init__(globals.resources[base_resource],
                                    batch=batch, *args, **kwargs)
 
-        self.x = 100.0
-        self.y = 100.0
+        self.x = globals.window.width * 0.2
+        self.y = globals.window.height * 0.5
 
         # set this to true if this is an enemy ship
         self.is_enemy = is_enemy
@@ -62,7 +62,6 @@ class Ship(pyglet.sprite.Sprite):
     def upgrade(self, sm):
         sm.module_initial(self)
         self.modules.append(sm)
-
 
     def get_health(self):
         return (self.base_health * self.health_multiplier) - self.damage_taken

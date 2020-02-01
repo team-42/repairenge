@@ -16,7 +16,7 @@ class Star(pyglet.sprite.Sprite):
     def update(self, dt):
         self.x = self.x - dt * self.velocity_x
         if self.x < -50:
-            self.x = 1000
+            self.x = globals.window.width + 50
             self.velocity_x = random.random() * 100
             self.scale = self.velocity_x * 0.02
 
@@ -29,7 +29,8 @@ class StarField:
         self._stars = []
         for i in range(number_stars):
             self._stars.append(
-                Star(globals.resources[Resources.Image_Starfield], random.random() * 1000, random.random() * 800,
+                Star(globals.resources[Resources.Image_Starfield], random.random() * globals.window.width,
+                     random.random() * globals.window.height,
                      batch=globals.sprite_batches[BatchNames.Star_Batch]))
 
     def update(self, dt):

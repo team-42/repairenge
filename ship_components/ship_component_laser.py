@@ -54,7 +54,7 @@ class ShipComponentLaser(ship_component.ShipComponent):
                                                               self._owner.y + self._local_y, direction)
             elif self.laser_type == LaserType.AngleLaser:
                 projectile = self.get_angle_laser(self._owner.x + self._local_x,
-                                                    self._owner.y + self._local_y, direction)
+                                                  self._owner.y + self._local_y, direction)
 
             if self._owner.is_enemy:
                 for proj in projectile:
@@ -62,7 +62,6 @@ class ShipComponentLaser(ship_component.ShipComponent):
             else:
                 for proj in projectile:
                     globals.player_projectiles.append(proj)
-
 
     def init_simple_laser(self):
         self.mass = 10
@@ -84,4 +83,4 @@ class ShipComponentLaser(ship_component.ShipComponent):
 
     def get_angle_laser(self, x, y, direction):
         return [ProjectileLaser(x, y, direction * self.speed, self.angle, direction, self.dmg),
-                ProjectileLaser(x, y, direction * self.speed, (90-self.angle) + 90, direction, self.dmg)]
+                ProjectileLaser(x, y, direction * self.speed, (90 - self.angle) + 90, direction, self.dmg)]

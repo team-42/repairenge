@@ -2,6 +2,7 @@ import ship
 import ship_components.ship_component_laser as smsp
 import math
 import random
+import globals
 
 
 class Boss(ship.Ship):
@@ -24,7 +25,7 @@ class Boss(ship.Ship):
 
         self.upgrade(smsp.ShipComponentLaser(12, 8, self, smsp.LaserType.AngleLaser))
         self.upgrade(smsp.ShipComponentLaser(8, 16, self, smsp.LaserType.AngleLaser))
-        #self.upgrade(smsp.ShipComponentLaser(4, 24, self, smsp.LaserType.SimpleLaser))
+        # self.upgrade(smsp.ShipComponentLaser(4, 24, self, smsp.LaserType.SimpleLaser))
 
         self.upgrade(smsp.ShipComponentLaser(4, 24, self, smsp.LaserType.AngleLaser))
 
@@ -33,7 +34,7 @@ class Boss(ship.Ship):
         # fly up and down
         self.y += math.sin(self.time) * self.engine_power / self.mass * dt
         # fly to the left
-        if self.x > 750:
+        if self.x > globals.window.width * 0.75:
             self.x -= 0.5 * self.engine_power / self.mass * dt
 
         super(Boss, self).update(dt)
