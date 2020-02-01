@@ -283,9 +283,9 @@ class Repairenge:
             globals.controls[Controls.Left] = True
         elif symbol == key.D:
             globals.controls[Controls.Right] = True
-        elif symbol == key.E:
+        elif symbol == key.SPACE:
             globals.controls[Controls.Action_0] = True
-        elif symbol == key.Q:
+        elif symbol == key.ENTER:
             globals.controls[Controls.Action_1] = True
 
     def on_key_release(self, symbol, modifiers):
@@ -303,9 +303,9 @@ class Repairenge:
             globals.controls[Controls.Left] = False
         elif symbol == key.D:
             globals.controls[Controls.Right] = False
-        elif symbol == key.E:
+        elif symbol == key.SPACE:
             globals.controls[Controls.Action_0] = False
-        elif symbol == key.Q:
+        elif symbol == key.ENTER:
             globals.controls[Controls.Action_1] = False
 
     # Checks for win and loss of the game
@@ -402,3 +402,5 @@ def on_draw():
 
 pyglet.clock.schedule_interval(update, 1.0 / 60)
 pyglet.app.run()
+play.delete()
+player.delete()
