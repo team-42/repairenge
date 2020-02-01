@@ -1,5 +1,5 @@
 import pyglet
-import ship_modules.ShipModuleSimplePhaser as smsp
+import ship_components.ship_component_simple_phaser as smsp
 
 
 class Ship(pyglet.sprite.Sprite):

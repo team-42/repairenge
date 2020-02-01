@@ -1,9 +1,9 @@
 import pyglet
 
-from ship_modules import ShipModule
+from ship_components import ship_component
 
 
-class ShipModuleSimplePhaser(ShipModule.ShipModule):
+class ShipModuleSimplePhaser(ship_component.ShipModule):
     def __init__(self, x, y, *args, **kwargs):
         ship_image = pyglet.resource.image("resources/ship/base.png")
 

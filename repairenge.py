@@ -1,6 +1,6 @@
 import pyglet
 from pyglet.window import key
-import Ship
+import ship
 import starfield
 
 controls_to_follow = ["ABS_RX", "ABS_RY", "ABS_X", "ABS_Y", "BTN_TL", "BTN_TR", "BTN_TL2", "BTN_TR2", "BTN_A", "BTN_B",
@@ -34,7 +34,7 @@ class Repairenge:
         self.controls = {"up": False, "down": False, "left": False, "right": False, "action_0": False}
 
         image = pyglet.resource.image("resources/ship/base.png")
-        self._ship = Ship.Ship(image)
+        self._ship = ship.Ship(image)
         self._starfield = starfield.StarField(100)
         self._shipmodules = []
 
