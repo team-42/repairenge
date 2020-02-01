@@ -1,5 +1,8 @@
 import pyglet
 import random
+from constants import Resources
+from constants import BatchNames
+import globals
 
 
 class Star(pyglet.sprite.Sprite):
@@ -22,17 +25,13 @@ class StarField:
 
     def __init__(self, number_stars):
         self._number_stars = number_stars
-        self._star_batch = pyglet.graphics.Batch()
-        star_image = pyglet.resource.image("resources/environment/star.png")
         self._stars_dx = random.random() * 10
         self._stars = []
         for i in range(number_stars):
-            self._stars.append(Star(star_image, random.random() * 1000, random.random() * 800,
-                                    batch=self._star_batch))
+            self._stars.append(
+                Star(globals.resources[Resources.Image_Starfield], random.random() * 1000, random.random() * 800,
+                     batch=globals.sprite_batches[BatchNames.Star_Batch]))
 
     def update(self, dt):
         for star in self._stars:
             star.update(dt)
-
-    def draw(self):
-        self._star_batch.draw()

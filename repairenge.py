@@ -2,8 +2,10 @@ import pyglet
 from pyglet.window import key
 import ship
 import starfield
-from constants import GameObjects
 from constants import Controls
+from constants import Resources
+from constants import BatchNames
+import globals
 
 controls_to_follow = ["ABS_RX", "ABS_RY", "ABS_X", "ABS_Y", "BTN_TL", "BTN_TR", "BTN_TL2", "BTN_TR2", "BTN_A", "BTN_B",
                       "BTN_Y", "BTN_X"]
@@ -26,52 +28,62 @@ class Repairenge:
     """
 
     def __init__(self, window, devices, keyboard):
+
+        # first: load resources
+        self._load_resources()
+
         self._window = window
         self._devices = devices
         self._keyboard = keyboard
 
-        self.game_objects = dict()
-        # list of projectiles
-        self.game_objects[GameObjects.Projectiles] = []
-        # list of enemies
-        self.game_objects[GameObjects.Enemies] = []
-        # list of components
-        self.game_objects[GameObjects.Components] = []
-        # inputs: up, down, left, right, action button
-        # 0 -> no button pressed
-        # 1 -> button is pressed
-        self.game_objects[GameObjects.Controls] = {Controls.Up: False, Controls.Down: False, Controls.Left: False,
-                                                   Controls.Right: False, Controls.Action_0: False}
         # the players ship
-        self.game_objects[GameObjects.Ship] = ship.Ship()
+        globals.player_ship = ship.Ship()
 
         # the background starfield
         self._starfield = starfield.StarField(100)
+
+    def _load_resources(self):
+        """
+        initially load all needed resources for the game
+        :return:
+        """
+        # define the sprite batches, the order defines the rendering order of rendering
+        globals.sprite_batches[BatchNames.Star_Batch] = pyglet.graphics.Batch()
+        globals.sprite_batches[BatchNames.Enemy_Batch] = pyglet.graphics.Batch()
+        globals.sprite_batches[BatchNames.Projectile_Batch] = pyglet.graphics.Batch()
+        globals.sprite_batches[BatchNames.Player_Ship_Batch] = pyglet.graphics.Batch()
+        globals.sprite_batches[BatchNames.Component_Batch] = pyglet.graphics.Batch()
+
+        # load the images
+        globals.resources[Resources.Image_Starfield] = pyglet.resource.image(
+            "resources/environment/star.png")
+        globals.resources[Resources.Image_Projectiles_Energy_01] = pyglet.resource.image(
+            "resources/projectiles/energy_01.png")
+        globals.resources[Resources.Image_Ship_Module_Base] = pyglet.resource.image(
+            "resources/ship/base.png")
+        globals.resources[Resources.Image_Ship_Module_Simple_Phaser] = pyglet.resource.image(
+            "resources/ship/simple_phaser.png")
 
     def draw(self):
         """
         called once per frame to draw everything
         :return:
         """
-
-        self._starfield.draw()
-        for projectile in self.game_objects[GameObjects.Projectiles]:
-            projectile.draw()
-
-        for enemy in self.game_objects[GameObjects.Enemies]:
-            enemy.draw()
-
-        # draw ship:
-        self.game_objects[GameObjects.Ship].draw()
-        # draw its modules:
-        for ship_component in self.game_objects[GameObjects.Ship].modules:
-            ship_component.draw()
+        print()
+        for key, batch in globals.sprite_batches.items():
+            #print(key)
+            batch.draw()
 
     def _update_and_delete(self, list_of_things, dt):
-        # update all things and delete them if they are not alive
+        """
+        update all things and delete them if they are not alive
+        :param list_of_things:
+        :param dt:
+        :return:
+        """
         i = 0
         while i < len(list_of_things):
-            list_of_things[i].update(dt, self.game_objects)
+            list_of_things[i].update(dt)
             if not list_of_things[i].alive:
                 if i == len(list_of_things) - 1:
                     list_of_things.pop()
@@ -89,16 +101,16 @@ class Repairenge:
         # print(self.controls)
         self._starfield.update(dt)
 
-        self.game_objects[GameObjects.Ship].update(dt, self.game_objects)
+        globals.player_ship.update(dt)
 
         # update all projectiles and delete them if they are not alive
-        self._update_and_delete(self.game_objects[GameObjects.Projectiles], dt)
+        self._update_and_delete(globals.projectiles, dt)
 
         # update all enemies and delete them if they are not alive
-        self._update_and_delete(self.game_objects[GameObjects.Enemies], dt)
+        self._update_and_delete(globals.enemies, dt)
 
         # update all "free" components and delete them if they are not alive
-        self._update_and_delete(self.game_objects[GameObjects.Components], dt)
+        self._update_and_delete(globals.components, dt)
 
     def on_key_press(self, symbol, modifiers):
         """
@@ -108,15 +120,15 @@ class Repairenge:
         :return:
         """
         if symbol == key.W:
-            self.game_objects[GameObjects.Controls][Controls.Up] = True
+            globals.controls[Controls.Up] = True
         elif symbol == key.S:
-            self.game_objects[GameObjects.Controls][Controls.Down] = True
+            globals.controls[Controls.Down] = True
         elif symbol == key.A:
-            self.game_objects[GameObjects.Controls][Controls.Left] = True
+            globals.controls[Controls.Left] = True
         elif symbol == key.D:
-            self.game_objects[GameObjects.Controls][Controls.Right] = True
+            globals.controls[Controls.Right] = True
         elif symbol == key.E:
-            self.game_objects[GameObjects.Controls][Controls.Action_0] = True
+            globals.controls[Controls.Action_0] = True
 
     def on_key_release(self, symbol, modifiers):
         """
@@ -126,22 +138,22 @@ class Repairenge:
         :return:
         """
         if symbol == key.W:
-            self.game_objects[GameObjects.Controls][Controls.Up] = False
+            globals.controls[Controls.Up] = False
         elif symbol == key.S:
-            self.game_objects[GameObjects.Controls][Controls.Down] = False
+            globals.controls[Controls.Down] = False
         elif symbol == key.A:
-            self.game_objects[GameObjects.Controls][Controls.Left] = False
+            globals.controls[Controls.Left] = False
         elif symbol == key.D:
-            self.game_objects[GameObjects.Controls][Controls.Right] = False
+            globals.controls[Controls.Right] = False
         elif symbol == key.E:
-            self.game_objects[GameObjects.Controls][Controls.Action_0] = False
+            globals.controls[Controls.Action_0] = False
 
 
 repairenge = Repairenge(window, devices, keyboard)
 window.push_handlers(repairenge)
 
 
-def watch_control(device, control, repairenge):
+def watch_control(device, control):
     """
     method for input device monitoring - noobstick
     :param device:
@@ -154,39 +166,40 @@ def watch_control(device, control, repairenge):
     def on_change(value):
         if control.raw_name == "ABS_X":
             if value < 110:
-                repairenge.game_objects[GameObjects.Controls][Controls.Left] = True
-                repairenge.game_objects[GameObjects.Controls][Controls.Right] = False
+                globals.controls[Controls.Left] = True
+                globals.controls[Controls.Right] = False
             elif value > 140:
-                repairenge.game_objects[GameObjects.Controls][Controls.Right] = True
-                repairenge.game_objects[GameObjects.Controls][Controls.Left] = False
+                globals.controls[Controls.Right] = True
+                globals.controls[Controls.Left] = False
             else:
-                repairenge.game_objects[GameObjects.Controls][Controls.Right] = False
-                repairenge.game_objects[GameObjects.Controls][Controls.Left] = False
+                globals.controls[Controls.Right] = False
+                globals.controls[Controls.Left] = False
 
         if control.raw_name == "ABS_Y":
             if value < 110:
-                repairenge.game_objects[GameObjects.Controls][Controls.Up] = True
-                repairenge.game_objects[GameObjects.Controls][Controls.Down] = False
+                globals.controls[Controls.Up] = True
+                globals.controls[Controls.Down] = False
             elif value > 140:
-                repairenge.game_objects[GameObjects.Controls][Controls.Down] = True
-                repairenge.game_objects[GameObjects.Controls][Controls.Up] = False
+                globals.controls[Controls.Down] = True
+                globals.controls[Controls.Up] = False
             else:
-                repairenge.game_objects[GameObjects.Controls][Controls.Down] = False
-                repairenge.game_objects[GameObjects.Controls][Controls.Up] = False
+                globals.controls[Controls.Down] = False
+                globals.controls[Controls.Up] = False
 
     if isinstance(control, pyglet.input.base.Button):
         @control.event
         def on_press():
             if control.raw_name == "BTN_A":
-                repairenge.game_objects[GameObjects.Controls][Controls.Action_0] = True
+                globals.controls[Controls.Action_0] = True
 
         @control.event
         def on_release():
             if control.raw_name == "BTN_A":
-                repairenge.game_objects[GameObjects.Controls][Controls.Action_0] = False
+                globals.controls[Controls.Action_0] = False
 
 
 # search for ps4 controller (or other things with controller in its name)
+# only tested with ps4 dualshock controller
 # print('Devices:')
 for device in devices:
     if "Controller" in device.name:
@@ -194,7 +207,7 @@ for device in devices:
             device.open(window=window)
             for control in device.get_controls():
                 if control.name in controls_to_follow or control.raw_name in controls_to_follow:
-                    watch_control(device, control, repairenge)
+                    watch_control(device, control)
 
         except pyglet.input.DeviceException:
             print('Fail')

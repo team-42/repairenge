@@ -1,5 +1,5 @@
 import pyglet
-from constants import GameObjects
+import globals
 
 
 class ShipComponent(pyglet.sprite.Sprite):
@@ -10,9 +10,9 @@ class ShipComponent(pyglet.sprite.Sprite):
         self._local_y = y
 
     # module actions are executed each frame
-    def module_action(self, dt, game_objects):
-        ship_x = game_objects[GameObjects.Ship].x
-        ship_y = game_objects[GameObjects.Ship].y
+    def module_action(self, dt):
+        ship_x = globals.player_ship.x
+        ship_y = globals.player_ship.y
         self.x = ship_x + self._local_x
         self.y = ship_y + self._local_y
 
