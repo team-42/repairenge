@@ -1,13 +1,18 @@
-import ship
-import ship_components.ship_component_laser as smsp
 import math
 import random
+
 import globals
+import ship
+import ship_components.ship_component_laser as smsp
+from ship_components.ship_component_heavy_hull import HeavyHull
+from ship_components.ship_component_jet import Jet
+from ship_components.ship_component_repair_crane import RepairCrane
+from constants import Resources
 
 
 class Boss(ship.Ship):
     def __init__(self, x, y):
-        super(Boss, self).__init__(True)
+        super(Boss, self).__init__(True, Resources.Image_Ship_Module_Enemy_Boss)
 
         self.x = x
         self.y = y
@@ -15,16 +20,27 @@ class Boss(ship.Ship):
         self.time = random.random() * 2.0 * 3.1415
         self.base_health = 100
 
-        # just add 1 simple phaser in front of the ship :)
         self.upgrade(smsp.ShipComponentLaser(-2, 1, self, smsp.LaserType.SimpleLaser))
-        self.upgrade(smsp.ShipComponentLaser(-2, 0, self, smsp.LaserType.SimpleLaser))
         self.upgrade(smsp.ShipComponentLaser(-2, -1, self, smsp.LaserType.SimpleLaser))
-
-        self.upgrade(smsp.ShipComponentLaser(-1, -2, self, smsp.LaserType.AngleLaser))
-        self.upgrade(smsp.ShipComponentLaser(-1, -1, self, smsp.LaserType.AngleLaser))
         self.upgrade(smsp.ShipComponentLaser(-3, 0, self, smsp.LaserType.AngleLaser))
+        self.upgrade(smsp.ShipComponentLaser(-1, -1, self, smsp.LaserType.AngleLaser))
         self.upgrade(smsp.ShipComponentLaser(-1, 1, self, smsp.LaserType.AngleLaser))
-        self.upgrade(smsp.ShipComponentLaser(-1, 2, self, smsp.LaserType.AngleLaser))
+        self.upgrade(smsp.ShipComponentLaser(-1, -2, self, smsp.LaserType.HeavyLaser))
+        self.upgrade(smsp.ShipComponentLaser(-1, 2, self, smsp.LaserType.HeavyLaser))
+        self.upgrade(smsp.ShipComponentLaser(1, 0, self, smsp.LaserType.HeavyLaser))
+
+        self.upgrade(HeavyHull(0, -2, self))
+        self.upgrade(HeavyHull(1, -2, self))
+        self.upgrade(HeavyHull(-2, 0, self))
+        self.upgrade(HeavyHull(0, 2, self))
+        self.upgrade(HeavyHull(1, 2, self))
+
+        self.upgrade(RepairCrane(0, -1, self))
+        self.upgrade(RepairCrane(0, 1, self))
+
+        self.upgrade(Jet(1, -1, self))
+        self.upgrade(Jet(2, 0, self))
+        self.upgrade(Jet(1, 1, self))
 
     def update(self, dt):
         self.time += dt

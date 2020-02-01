@@ -1,12 +1,14 @@
-import ship
-import ship_components.ship_component_laser as smsp
 import math
 import random
+
+import ship
+import ship_components.ship_component_laser as smsp
+from constants import Resources
 
 
 class Drone(ship.Ship):
     def __init__(self, x, y):
-        super(Drone, self).__init__(True)
+        super(Drone, self).__init__(True, Resources.Image_Ship_Module_Enemy)
 
         self.x = x
         self.y = y

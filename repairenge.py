@@ -21,7 +21,7 @@ CONDITION_SPAWN_BOSS = 2
 CONDITION_BOSS = 3
 CONDITION_LOSS = -1
 CONDITION_WIN = -2
-NUM_ENEMIES_TO_DEFEAT = 20
+NUM_ENEMIES_TO_DEFEAT = 1
 
 # raw_names on ps4 controller
 controls_to_follow = ["ABS_RX", "ABS_RY", "ABS_X", "ABS_Y", "BTN_TL", "BTN_TR", "BTN_TL2", "BTN_TR2", "BTN_A", "BTN_B",
@@ -110,6 +110,27 @@ class Repairenge:
             "resources/ship/enemy_easy_body.png")
         globals.resources[Resources.Image_Ship_Module_Enemy].anchor_x = 32 + 16
         globals.resources[Resources.Image_Ship_Module_Enemy].anchor_y = 16
+
+        globals.resources[Resources.Image_Ship_Module_Enemy_Medium] = pyglet.resource.image(
+            "resources/ship/enemy_medium_body.png")
+        globals.resources[Resources.Image_Ship_Module_Enemy_Medium].anchor_x = 32 + 16
+        globals.resources[Resources.Image_Ship_Module_Enemy_Medium].anchor_y = 16
+
+        globals.resources[Resources.Image_Ship_Module_Enemy_Medium2] = pyglet.resource.image(
+            "resources/ship/enemy_medium2_body.png")
+        globals.resources[Resources.Image_Ship_Module_Enemy_Medium2].anchor_x = 32 + 16
+        globals.resources[Resources.Image_Ship_Module_Enemy_Medium2].anchor_y = 16
+
+        globals.resources[Resources.Image_Ship_Module_Enemy_Large] = pyglet.resource.image(
+            "resources/ship/enemy_large_body.png")
+        globals.resources[Resources.Image_Ship_Module_Enemy_Large].anchor_x = 32 + 16
+        globals.resources[Resources.Image_Ship_Module_Enemy_Large].anchor_y = 16
+
+        globals.resources[Resources.Image_Ship_Module_Enemy_Boss] = pyglet.resource.image(
+            "resources/ship/enemy_boss_body.png")
+        globals.resources[Resources.Image_Ship_Module_Enemy_Boss].anchor_x = 32 + 16
+        globals.resources[Resources.Image_Ship_Module_Enemy_Boss].anchor_y = 16
+
 
         globals.resources[Resources.Image_Ship_Module_Simple_Phaser] = pyglet.resource.image(
             "resources/ship/component_onbase_phaser.png")

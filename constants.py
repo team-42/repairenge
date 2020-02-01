@@ -24,6 +24,10 @@ class Resources(Enum):
     Image_Ship_Module_Repair = 211
     Image_Ship_Module_Jet = 220
     Image_Ship_Module_Enemy = 300
+    Image_Ship_Module_Enemy_Medium = 301
+    Image_Ship_Module_Enemy_Medium2 = 302
+    Image_Ship_Module_Enemy_Large = 303
+    Image_Ship_Module_Enemy_Boss = 304
 
 
 class BatchNames(Enum):
