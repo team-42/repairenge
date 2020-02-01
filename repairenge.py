@@ -244,12 +244,12 @@ class Repairenge:
     def update_game_condition(self):
         if self.game_condition == CONDITION_RUNNING:
             loss = globals.player_ship.get_health() <= 0
+            win = globals.defeated_enemies >= NUM_ENEMIES_TO_DEFEAT
             if loss:
                 self.game_condition = CONDITION_LOSS
                 player_ship.alive = False
                 print("Game condition has changed to LOSS")
-            win = globals.defeated_enemies >= NUM_ENEMIES_TO_DEFEAT
-            if win:
+            elif win:
                 self.game_condition = CONDITION_WIN
                 print("Game condition has changed to WIN")
 
