@@ -37,6 +37,11 @@ window.push_handlers(keyboard)
 
 devices = pyglet.input.get_devices()
 
+play = pyglet.media.load('resources/music/complete.mp3')
+player = pyglet.media.Player()
+player.queue(play)
+player.loop = True
+player.play()
 
 class Repairenge:
     """
@@ -97,15 +102,15 @@ class Repairenge:
         util.center_image(globals.resources[Resources.Image_Projectiles_Energy_01])
 
         globals.resources[Resources.Image_Ship_Module_Base] = pyglet.resource.image(
-            "resources/ship/ship2_body.png")
+            "resources/ship/ship_body.png")
         util.center_image(globals.resources[Resources.Image_Ship_Module_Base])
 
         globals.resources[Resources.Image_Ship_Module_Enemy] = pyglet.resource.image(
-            "resources/ship/ship1_body.png")
+            "resources/ship/enemy_easy_body.png")
         util.center_image(globals.resources[Resources.Image_Ship_Module_Enemy])
 
         globals.resources[Resources.Image_Ship_Module_Simple_Phaser] = pyglet.resource.image(
-            "resources/ship/ship2_detail.png")
+            "resources/ship/component_onbase_phaser.png")
         util.center_image(globals.resources[Resources.Image_Ship_Module_Simple_Phaser])
 
     def draw(self):
