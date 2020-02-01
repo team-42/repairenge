@@ -33,7 +33,8 @@ class Repairenge:
         # 1 -> button is pressed
         self.controls = {"up": False, "down": False, "left": False, "right": False, "action_0": False}
 
-        self._ship = Ship.Ship("resources/ship/base.png")
+        image = pyglet.resource.image("resources/ship/base.png")
+        self._ship = Ship.Ship(image)
         self._starfield = starfield.StarField(100)
         self._shipmodules = []
 

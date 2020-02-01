@@ -1,9 +1,13 @@
+import pyglet
+
 from ship_modules import ShipModule
 
 
 class ShipModuleSimplePhaser(ShipModule.ShipModule):
-    def __init__(self, x, y):
-        super(ShipModuleSimplePhaser, self).__init__(10, x, y)
+    def __init__(self, x, y, *args, **kwargs):
+        ship_image = pyglet.resource.image("resources/ship/base.png")
+
+        super(ShipModuleSimplePhaser, self).__init__(10, x, y, ship_image, *args, *kwargs)
         self.cd = 1
         self.ts_check_fire = self.cd
 

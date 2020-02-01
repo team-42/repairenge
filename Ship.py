@@ -5,8 +5,8 @@ import ship_modules.ShipModuleSimplePhaser as smsp
 class Ship(pyglet.sprite.Sprite):
     def __init__(self, *args, **kwargs):
         super(Ship, self).__init__(*args, **kwargs)
-        self.x = 0.0
-        self.y = 0.0
+        self.x = 100.0
+        self.y = 100.0
 
         # Health Segment
         self.base_health = 100
