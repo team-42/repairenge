@@ -78,7 +78,10 @@ class Ship(pyglet.sprite.Sprite):
             print("grid: {}, {}".format(len(self.grid), self.grid))
 
     def get_health(self):
-        return (self.base_health * self.health_multiplier) - self.damage_taken
+        return self.get_max_health() - self.damage_taken
+
+    def get_max_health(self):
+        return self.base_health * self.health_multiplier
 
     def damage(self, dmg):
         self.damage_taken += dmg
