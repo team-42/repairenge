@@ -9,11 +9,11 @@ class PlayerShip(ship.Ship):
         super(PlayerShip, self).__init__(False)
 
         # just add 7 simple phaser in front of the ship :)
-        self.upgrade(smsp.ShipComponentLaser(24, 8, self, smsp.LaserType.SimpleLaser))
-        self.upgrade(smsp.ShipComponentLaser(20, 0, self, smsp.LaserType.SimpleLaser))
-        self.upgrade(smsp.ShipComponentLaser(20, 16, self, smsp.LaserType.SimpleLaser))
-        self.upgrade(smsp.ShipComponentLaser(16, -8, self, smsp.LaserType.SimpleLaser))
-        self.upgrade(smsp.ShipComponentLaser(16, 24, self, smsp.LaserType.SimpleLaser))
+        self.upgrade(smsp.ShipComponentLaser(24, 0, self, smsp.LaserType.SimpleLaser))
+        self.upgrade(smsp.ShipComponentLaser(20, -8, self, smsp.LaserType.SimpleLaser))
+        self.upgrade(smsp.ShipComponentLaser(20, 8, self, smsp.LaserType.SimpleLaser))
+        self.upgrade(smsp.ShipComponentLaser(16, -16, self, smsp.LaserType.SimpleLaser))
+        self.upgrade(smsp.ShipComponentLaser(16, 16, self, smsp.LaserType.SimpleLaser))
         #
         # self.upgrade(smsp.ShipComponentLaser(12, 8, self, smsp.LaserType.SimpleLaser))
         # self.upgrade(smsp.ShipComponentLaser(8, 16, self, smsp.LaserType.SimpleLaser))
