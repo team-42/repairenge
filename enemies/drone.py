@@ -16,7 +16,7 @@ class Drone(ship.Ship):
 
         # just add 1 simple phaser in front of the ship :)
         phaser = smsp.ShipComponentSimplePhaser(-16, 0, self)
-        self.modules.append(phaser)
+        self.upgrade(phaser)
 
     def update(self, dt):
         super(Drone, self).update(dt)

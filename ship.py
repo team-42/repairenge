@@ -38,6 +38,8 @@ class Ship(pyglet.sprite.Sprite):
 
     def upgrade(self, sm):
         sm.module_initial()
+        self.modules.append(sm)
+
 
     def get_health(self):
         return (self.base_health * self.health_multiplier) - self.damage_taken
