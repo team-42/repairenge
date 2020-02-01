@@ -10,7 +10,8 @@ from constants import BatchNames
 
 class LaserType(Enum):
     SimpleLaser = 1
-    StrongLaser = 2
+    AngleLaser = 2
+    StrongLaser = 3
 
 
 class ShipComponentLaser(ship_component.ShipComponent):
@@ -30,14 +31,16 @@ class ShipComponentLaser(ship_component.ShipComponent):
     def module_initial(self, ship):
         if self.laser_type == LaserType.SimpleLaser:
             self.init_simple_laser()
+        elif self.laser_type == LaserType.AngleLaser:
+            self.init_angle_laser()
         elif self.laser_type == LaserType.StrongLaser:
             pass
 
         self.ts_check_fire = self.cd
         ship.mass += self.mass
 
-    def module_action(self, dt):
-        super(ShipComponentLaser, self).module_action(dt)
+    def update(self, dt):
+        super(ShipComponentLaser, self).update(dt)
         self.ts_check_fire -= dt
         if self.ts_check_fire <= 0:
             self.ts_check_fire = self.cd - 0.01 + 0.02 * random.random()
@@ -48,11 +51,16 @@ class ShipComponentLaser(ship_component.ShipComponent):
             if self.laser_type == LaserType.SimpleLaser:
                 projectile = self.get_simple_laser_projectile(self._owner.x + self._local_x,
                                                               self._owner.y + self._local_y, direction)
+            elif self.laser_type == LaserType.AngleLaser:
+                projectile = self.get_angle_laser(self._owner.x + self._local_x,
+                                                    self._owner.y + self._local_y, direction)
 
             if self._owner.is_enemy:
-                globals.enemy_projectiles.append(projectile)
+                for proj in projectile:
+                    globals.enemy_projectiles.append(proj)
             else:
-                globals.player_projectiles.append(projectile)
+                for proj in projectile:
+                    globals.player_projectiles.append(proj)
 
     def init_simple_laser(self):
         self.mass = 10
@@ -61,4 +69,15 @@ class ShipComponentLaser(ship_component.ShipComponent):
         self.angle = 90
 
     def get_simple_laser_projectile(self, x, y, direction):
-        return ProjectileLaser(x, y, direction * self.speed, self.angle, direction)
+        return [ProjectileLaser(x, y, direction * self.speed, self.angle, direction)]
+
+    def init_angle_laser(self):
+        self.mass = 15
+        self.cd = 1
+        self.speed = 800
+        # since two projectiles are created the diff between 90 and angle is taken and added to 90 for the other one
+        self.angle = 70
+
+    def get_angle_laser(self, x, y, direction):
+        return [ProjectileLaser(x, y, direction * self.speed, self.angle, direction),
+                ProjectileLaser(x, y, direction * self.speed, (90-self.angle) + 90, direction)]
