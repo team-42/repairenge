@@ -6,7 +6,7 @@ import globals
 class HeavyHull(ship_component.ShipComponent):
     def __init__(self, x, y, owner, *args, **kwargs):
         super().__init__(x, y, owner,
-                         globals.resources[Resources.Image_Ship_Module_Base],
+                         globals.resources[Resources.Image_Ship_Module_Hull],
                          batch=globals.sprite_batches[BatchNames.Component_Batch], *args, **kwargs)
 
     def module_initial(self, ship):

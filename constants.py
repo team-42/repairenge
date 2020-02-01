@@ -18,6 +18,11 @@ class Resources(Enum):
     Image_Projectiles_Energy_01 = 100
     Image_Ship_Module_Base = 200
     Image_Ship_Module_Simple_Phaser = 201
+    Image_Ship_Module_Angle_Laser = 202
+    Image_Ship_Module_Heavy_Laser = 203
+    Image_Ship_Module_Hull = 210
+    Image_Ship_Module_Repair = 211
+    Image_Ship_Module_Jet = 220
     Image_Ship_Module_Enemy = 300
 
 

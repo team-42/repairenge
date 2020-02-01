@@ -16,8 +16,13 @@ class LaserType(Enum):
 
 class ShipComponentLaser(ship_component.ShipComponent):
     def __init__(self, x, y, owner, laser_type, *args, **kwargs):
-        super(ShipComponentLaser, self).__init__(x, y, owner,
-                                                 globals.resources[Resources.Image_Ship_Module_Simple_Phaser],
+        if laser_type == LaserType.HeavyLaser:
+            image = globals.resources[Resources.Image_Ship_Module_Heavy_Laser]
+        elif laser_type == LaserType.AngleLaser:
+            image = globals.resources[Resources.Image_Ship_Module_Angle_Laser]
+        else:
+            image = globals.resources[Resources.Image_Ship_Module_Simple_Phaser]
+        super(ShipComponentLaser, self).__init__(x, y, owner, image,
                                                  batch=globals.sprite_batches[BatchNames.Component_Batch],
                                                  *args, *kwargs)
         self.cd = 1

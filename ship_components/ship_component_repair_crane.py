@@ -6,7 +6,7 @@ import globals
 class RepairCrane(ship_component.ShipComponent):
     def __init__(self, x, y, owner, *args, **kwargs):
         super(RepairCrane, self).__init__(x, y, owner,
-                                          globals.resources[Resources.Image_Ship_Module_Base],
+                                          globals.resources[Resources.Image_Ship_Module_Repair],
                                           batch=globals.sprite_batches[BatchNames.Component_Batch],
                                           *args, *kwargs)
         self.heal = 10

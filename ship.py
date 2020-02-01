@@ -29,7 +29,7 @@ class Ship(pyglet.sprite.Sprite):
         # value == 1 -> reserved for base model
         self.grid = {
             (0, 0): 1,
-            (0, -1): 1
+            (-1, 0): 1
         }
 
         # Health Segment

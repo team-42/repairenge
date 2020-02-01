@@ -114,6 +114,22 @@ class Repairenge:
         globals.resources[Resources.Image_Ship_Module_Simple_Phaser] = pyglet.resource.image(
             "resources/ship/component_onbase_phaser.png")
         util.center_image(globals.resources[Resources.Image_Ship_Module_Simple_Phaser])
+        globals.resources[Resources.Image_Ship_Module_Angle_Laser] = pyglet.resource.image(
+            "resources/ship/component_onbase_angle_laser.png")
+        util.center_image(globals.resources[Resources.Image_Ship_Module_Angle_Laser])
+        globals.resources[Resources.Image_Ship_Module_Heavy_Laser] = pyglet.resource.image(
+            "resources/ship/component_onbase_heavy_laser.png")
+        util.center_image(globals.resources[Resources.Image_Ship_Module_Heavy_Laser])
+
+        globals.resources[Resources.Image_Ship_Module_Hull] = pyglet.resource.image(
+            "resources/ship/component_onbase_hull.png")
+        util.center_image(globals.resources[Resources.Image_Ship_Module_Hull])
+        globals.resources[Resources.Image_Ship_Module_Repair] = pyglet.resource.image(
+            "resources/ship/component_onbase_repair.png")
+        util.center_image(globals.resources[Resources.Image_Ship_Module_Repair])
+        globals.resources[Resources.Image_Ship_Module_Jet] = pyglet.resource.image(
+            "resources/ship/component_onbase_engine.png")
+        util.center_image(globals.resources[Resources.Image_Ship_Module_Jet])
 
     def draw(self):
         """

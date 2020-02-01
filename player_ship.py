@@ -1,7 +1,9 @@
 import ship
 import globals
 import ship_components.ship_component_laser as smsp
-import ship_components.ship_component_jet as scj
+from ship_components.ship_component_heavy_hull import HeavyHull
+from ship_components.ship_component_repair_crane import RepairCrane
+from ship_components.ship_component_jet import Jet
 from constants import Controls
 
 
@@ -9,20 +11,20 @@ class PlayerShip(ship.Ship):
     def __init__(self):
         super(PlayerShip, self).__init__(False)
 
-        # just add 7 simple phaser in front of the ship :)
-        self.upgrade(smsp.ShipComponentLaser(1, 0, self, smsp.LaserType.SimpleLaser))
+        self.upgrade(smsp.ShipComponentLaser(1, 0, self, smsp.LaserType.AngleLaser))
+        self.upgrade(smsp.ShipComponentLaser(0, -2, self, smsp.LaserType.HeavyLaser))
+        self.upgrade(smsp.ShipComponentLaser(0, 2, self, smsp.LaserType.HeavyLaser))
         self.upgrade(smsp.ShipComponentLaser(1, -1, self, smsp.LaserType.SimpleLaser))
         self.upgrade(smsp.ShipComponentLaser(1, 1, self, smsp.LaserType.SimpleLaser))
-        self.upgrade(smsp.ShipComponentLaser(1, -2, self, smsp.LaserType.SimpleLaser))
-        self.upgrade(smsp.ShipComponentLaser(1, 2, self, smsp.LaserType.SimpleLaser))
-
-        self.upgrade(scj.Jet(2, 2, self))
-        #
-        # self.upgrade(smsp.ShipComponentLaser(12, 8, self, smsp.LaserType.SimpleLaser))
-        # self.upgrade(smsp.ShipComponentLaser(8, 16, self, smsp.LaserType.SimpleLaser))
-        # #self.upgrade(smsp.ShipComponentLaser(4, 24, self, smsp.LaserType.SimpleLaser))
-        #
-        # self.upgrade(smsp.ShipComponentLaser(4, 24, self, smsp.LaserType.AngleLaser))
+        self.upgrade(HeavyHull(0, 1, self))
+        self.upgrade(HeavyHull(0, -1, self))
+        self.upgrade(HeavyHull(-1, 2, self))
+        self.upgrade(HeavyHull(-1, -2, self))
+        self.upgrade(RepairCrane(-1, 1, self))
+        self.upgrade(RepairCrane(-1, -1, self))
+        self.upgrade(Jet(-2, -1, self))
+        self.upgrade(Jet(-2, 0, self))
+        self.upgrade(Jet(-2, 1, self))
 
     def update(self, dt):
         """
