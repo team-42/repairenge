@@ -19,15 +19,15 @@ class Ship(pyglet.sprite.Sprite):
         self.mass = 1000.0
 
         # modules
-        self.modules = [smsp.ShipModuleSimplePhaser(0, 0)]
+        self.modules = [smsp.ShipComponentSimplePhaser(0, 0)]
 
-    def update(self, dt):
+    def update(self, dt, game_objects):
         """
         :param dt:
         :return:
         """
         for mod in self.modules:
-            mod.module_action(dt)
+            mod.module_action(dt, game_objects)
 
     def upgrade(self, sm):
         sm.module_initial()
