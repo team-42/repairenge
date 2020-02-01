@@ -16,18 +16,15 @@ class Boss(ship.Ship):
         self.base_health = 100
 
         # just add 1 simple phaser in front of the ship :)
-        self.upgrade(smsp.ShipComponentLaser(-16, 0, self, smsp.LaserType.SimpleLaser))
-        self.upgrade(smsp.ShipComponentLaser(16, 0, self, smsp.LaserType.SimpleLaser))
+        self.upgrade(smsp.ShipComponentLaser(-2, 1, self, smsp.LaserType.SimpleLaser))
+        self.upgrade(smsp.ShipComponentLaser(-2, 0, self, smsp.LaserType.SimpleLaser))
+        self.upgrade(smsp.ShipComponentLaser(-2, -1, self, smsp.LaserType.SimpleLaser))
 
-        self.upgrade(smsp.ShipComponentLaser(12, -8, self, smsp.LaserType.SimpleLaser))
-        self.upgrade(smsp.ShipComponentLaser(8, -16, self, smsp.LaserType.AngleLaser))
-        self.upgrade(smsp.ShipComponentLaser(4, -24, self, smsp.LaserType.AngleLaser))
-
-        self.upgrade(smsp.ShipComponentLaser(12, 8, self, smsp.LaserType.AngleLaser))
-        self.upgrade(smsp.ShipComponentLaser(8, 16, self, smsp.LaserType.AngleLaser))
-        # self.upgrade(smsp.ShipComponentLaser(4, 24, self, smsp.LaserType.SimpleLaser))
-
-        self.upgrade(smsp.ShipComponentLaser(4, 24, self, smsp.LaserType.AngleLaser))
+        self.upgrade(smsp.ShipComponentLaser(-1, -2, self, smsp.LaserType.AngleLaser))
+        self.upgrade(smsp.ShipComponentLaser(-1, -1, self, smsp.LaserType.AngleLaser))
+        self.upgrade(smsp.ShipComponentLaser(-3, 0, self, smsp.LaserType.AngleLaser))
+        self.upgrade(smsp.ShipComponentLaser(-1, 1, self, smsp.LaserType.AngleLaser))
+        self.upgrade(smsp.ShipComponentLaser(-1, 2, self, smsp.LaserType.AngleLaser))
 
     def update(self, dt):
         self.time += dt
