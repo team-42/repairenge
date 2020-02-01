@@ -24,7 +24,7 @@ class Ship(pyglet.sprite.Sprite):
         self.alive = True
 
         # Health Segment
-        self.base_health = 100
+        self.base_health = 200
         self.health_multiplier = 1.0
         self.damage_taken = 0
         self.current_health = self.base_health * self.health_multiplier

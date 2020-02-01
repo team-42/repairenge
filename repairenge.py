@@ -1,6 +1,7 @@
 import random
 
 import pyglet
+import ship
 from pyglet.text import Label
 from pyglet.window import key
 
@@ -126,6 +127,10 @@ class Repairenge:
         while i < len(list_of_things):
             list_of_things[i].update(dt)
             if not list_of_things[i].alive:
+                if isinstance(list_of_things[i], ship.Ship):
+                    print("Delete thing {}".format(list_of_things[i]))
+                    if isinstance(list_of_things[i], Boss):
+                        self.game_condition = CONDITION_WIN
                 # delete the sprite and vertices from the batch
                 list_of_things[i].delete()
                 if hasattr(list_of_things[i], 'modules'):
@@ -269,9 +274,6 @@ class Repairenge:
             elif boss:
                 self.game_condition = CONDITION_SPAWN_BOSS
                 print("Game condition has changed to SPAWN_BOSS")
-            if self.game_condition == CONDITION_BOSS:
-                self.game_condition = CONDITION_WIN
-                print("Game condition has changed to WIN")
 
 
 repairenge = Repairenge(window, devices, keyboard)
