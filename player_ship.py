@@ -1,6 +1,7 @@
 import ship
 import globals
 import ship_components.ship_component_laser as smsp
+import ship_components.ship_component_jet as scj
 from constants import Controls
 
 
@@ -14,6 +15,8 @@ class PlayerShip(ship.Ship):
         self.upgrade(smsp.ShipComponentLaser(1, 1, self, smsp.LaserType.SimpleLaser))
         self.upgrade(smsp.ShipComponentLaser(1, -2, self, smsp.LaserType.SimpleLaser))
         self.upgrade(smsp.ShipComponentLaser(1, 2, self, smsp.LaserType.SimpleLaser))
+
+        self.upgrade(scj.Jet(2, 2, self))
         #
         # self.upgrade(smsp.ShipComponentLaser(12, 8, self, smsp.LaserType.SimpleLaser))
         # self.upgrade(smsp.ShipComponentLaser(8, 16, self, smsp.LaserType.SimpleLaser))

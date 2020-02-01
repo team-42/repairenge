@@ -46,7 +46,7 @@ class ShipComponentLaser(ship_component.ShipComponent):
             return
 
         self.ts_check_fire -= dt
-        if globals.controls[Controls.Action_0] and self.ts_check_fire <= 0:
+        if (self._owner.is_enemy or (not self._owner.is_enemy and globals.controls[Controls.Action_0])) and self.ts_check_fire <= 0:
             self.ts_check_fire = self.cd - 0.01 + 0.02 * random.random()
 
             # check: is this laser from the player or an enemy?
