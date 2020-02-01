@@ -3,9 +3,9 @@ import globals
 
 
 class ShipComponent(pyglet.sprite.Sprite):
-    def __init__(self, mass, x, y, owner, *args, **kwargs):
+    def __init__(self, x, y, owner, *args, **kwargs):
         super(ShipComponent, self).__init__(*args, **kwargs)
-        self.mass = mass
+        self.mass = 0
         self._local_x = x
         self._local_y = y
         self._owner = owner
@@ -20,5 +20,5 @@ class ShipComponent(pyglet.sprite.Sprite):
     def module_initial(self, ship):
         pass
 
-    def get_mass(self):
-        return self.mass
+#    def get_mass(self):
+#        return self.mass
