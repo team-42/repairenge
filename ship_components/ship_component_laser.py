@@ -4,7 +4,7 @@ from enum import Enum
 from projectiles.projectile_laser import ProjectileLaser
 from ship_components import ship_component
 import globals
-from constants import Resources
+from constants import Resources, Controls
 from constants import BatchNames
 
 
@@ -42,11 +42,11 @@ class ShipComponentLaser(ship_component.ShipComponent):
 
     def update(self, dt):
         super(ShipComponentLaser, self).update(dt)
-        if self._owner is None:
+        if self._owner is None :
             return
 
         self.ts_check_fire -= dt
-        if self.ts_check_fire <= 0:
+        if globals.controls[Controls.Action_0] and self.ts_check_fire <= 0:
             self.ts_check_fire = self.cd - 0.01 + 0.02 * random.random()
 
             # check: is this laser from the player or an enemy?
