@@ -8,8 +8,8 @@ from constants import LaserColors
 
 
 class ProjectileLaser(Projectile):
-    def __init__(self, x, y, speed, angle, direction, *args, **kwargs):
-        super(ProjectileLaser, self).__init__(x, y, speed, 0,
+    def __init__(self, x, y, speed, angle, direction, dmg, *args, **kwargs):
+        super(ProjectileLaser, self).__init__(x, y, speed, dmg,
                                               globals.resources[Resources.Image_Projectiles_Energy_01],
                                               batch=globals.sprite_batches[BatchNames.Projectile_Batch],
                                               *args, *kwargs)

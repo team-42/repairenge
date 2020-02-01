@@ -24,6 +24,7 @@ class ShipComponentLaser(ship_component.ShipComponent):
         self.laser_type = laser_type
         self.speed = 800
         self.angle = 90
+        self.dmg = 0
         self.ts_check_fire = self.cd  #
         if owner.is_enemy:
             self.ts_check_fire *= random.random()
@@ -64,20 +65,22 @@ class ShipComponentLaser(ship_component.ShipComponent):
 
     def init_simple_laser(self):
         self.mass = 10
+        self.dmg = 10
         self.cd = 1
         self.speed = 800
         self.angle = 90
 
     def get_simple_laser_projectile(self, x, y, direction):
-        return [ProjectileLaser(x, y, direction * self.speed, self.angle, direction)]
+        return [ProjectileLaser(x, y, direction * self.speed, self.angle, direction, self.dmg)]
 
     def init_angle_laser(self):
         self.mass = 15
+        self.dmg = 10
         self.cd = 1
         self.speed = 800
         # since two projectiles are created the diff between 90 and angle is taken and added to 90 for the other one
         self.angle = 70
 
     def get_angle_laser(self, x, y, direction):
-        return [ProjectileLaser(x, y, direction * self.speed, self.angle, direction),
-                ProjectileLaser(x, y, direction * self.speed, (90-self.angle) + 90, direction)]
+        return [ProjectileLaser(x, y, direction * self.speed, self.angle, direction, self.dmg),
+                ProjectileLaser(x, y, direction * self.speed, (90-self.angle) + 90, direction, self.dmg)]
