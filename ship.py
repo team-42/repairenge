@@ -19,31 +19,21 @@ class Ship(pyglet.sprite.Sprite):
         self.mass = 1.0
 
         # modules
-        self.modules = [smsp.ShipModuleSimplePhaser(0, 0)]
+        self.modules = [smsp.ShipComponentSimplePhaser(0, 0)]
 
-
-    def update(self, dt, controls):
+    def update(self, dt, game_objects):
         """
         :param dt:
         :return:
         """
         for mod in self.modules:
-            mod.module_action(dt)
-
-        # controls:
-        if controls["up"]:
-            self.y += self.engine_power / self.mass * dt
-        if controls["down"]:
-            self.y -= self.engine_power / self.mass * dt
-        if controls["left"]:
-            self.x -= self.engine_power / self.mass * dt
-        if controls["right"]:
-            self.x += self.engine_power / self.mass * dt
-
-
+            mod.module_action(dt, game_objects)
 
     def upgrade(self, sm):
         sm.module_initial()
+
+    def draw(self):
+        pass
 
     def get_health(self):
         return (self.base_health * self.health_multiplier) - self.damage_taken
