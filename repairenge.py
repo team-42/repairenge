@@ -71,7 +71,6 @@ class Repairenge:
         called once per frame to draw everything
         :return:
         """
-        print()
         for key, batch in globals.sprite_batches.items():
             # print(key)
             batch.draw()
