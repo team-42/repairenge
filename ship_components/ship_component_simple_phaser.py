@@ -14,7 +14,7 @@ class ShipComponentSimplePhaser(ship_component.ShipComponent):
                                                         *args, *kwargs)
         self.cd = 1
         self.ts_check_fire = self.cd  #
-        if owner._is_enemy:
+        if owner.is_enemy:
             self.ts_check_fire *= random.random()
 
     def module_initial(self, ship):
@@ -27,7 +27,7 @@ class ShipComponentSimplePhaser(ship_component.ShipComponent):
             self.ts_check_fire = self.cd - 0.01 + 0.02 * random.random()
 
             # check: is this phaser from the player or an enemy?
-            if self._owner._is_enemy:
+            if self._owner.is_enemy:
                 globals.enemy_projectiles.append(
                     ProjectileLaser(self._owner.x + self._local_x, self._owner.y + self._local_y, -1)
                 )
