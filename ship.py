@@ -8,10 +8,12 @@ class Ship(pyglet.sprite.Sprite):
     def __init__(self, is_enemy, *args, **kwargs):
         if is_enemy:
             batch = globals.sprite_batches[BatchNames.Enemy_Batch]
+            base_resource = Resources.Image_Ship_Module_Enemy
         else:
             batch = globals.sprite_batches[BatchNames.Player_Ship_Batch]
+            base_resource = Resources.Image_Ship_Module_Base
 
-        super(Ship, self).__init__(globals.resources[Resources.Image_Ship_Module_Base],
+        super(Ship, self).__init__(globals.resources[base_resource],
                                    batch=batch, *args, **kwargs)
 
         self.x = 100.0

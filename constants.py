@@ -15,6 +15,7 @@ class Resources(Enum):
     Image_Projectiles_Energy_01 = 100
     Image_Ship_Module_Base = 200
     Image_Ship_Module_Simple_Phaser = 201
+    Image_Ship_Module_Enemy = 300
 
 
 class BatchNames(Enum):

@@ -92,9 +92,11 @@ class Repairenge:
         globals.resources[Resources.Image_Projectiles_Energy_01] = pyglet.resource.image(
             "resources/projectiles/energy_01.png")
         globals.resources[Resources.Image_Ship_Module_Base] = pyglet.resource.image(
-            "resources/ship/base.png")
+            "resources/ship/ship2_body.png")
+        globals.resources[Resources.Image_Ship_Module_Enemy] = pyglet.resource.image(
+            "resources/ship/ship1_body.png")
         globals.resources[Resources.Image_Ship_Module_Simple_Phaser] = pyglet.resource.image(
-            "resources/ship/simple_phaser.png")
+            "resources/ship/ship2_detail.png")
 
     def draw(self):
         """
