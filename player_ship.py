@@ -24,8 +24,6 @@ class PlayerShip(ship.Ship):
         :param dt:
         :return:
         """
-        # first superclass.update
-        super(PlayerShip, self).update(dt)
 
         # controls:
         if globals.controls[Controls.Up]:
@@ -36,3 +34,6 @@ class PlayerShip(ship.Ship):
             self.x -= self.engine_power / self.mass * dt
         if globals.controls[Controls.Right]:
             self.x += self.engine_power / self.mass * dt
+
+        # first superclass.update
+        super(PlayerShip, self).update(dt)

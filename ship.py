@@ -12,7 +12,7 @@ class Ship(pyglet.sprite.Sprite):
         self.y = 100.0
 
         # set this to true if this is an enemy ship
-        self._is_enemy = is_enemy
+        self.is_enemy = is_enemy
         self.alive = True
 
         # Health Segment
