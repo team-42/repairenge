@@ -22,8 +22,8 @@ class Ship(pyglet.sprite.Sprite):
         self.current_health = self.base_health * self.health_multiplier
 
         # ship movement properties
-        self.engine_power = 500.0
-        self.mass = 1.0
+        self.engine_power = 500000.0
+        self.mass = 1000.0
 
         # modules
         self.modules = list()
@@ -42,7 +42,7 @@ class Ship(pyglet.sprite.Sprite):
                 self.alive = False
 
     def upgrade(self, sm):
-        sm.module_initial()
+        sm.module_initial(self)
         self.modules.append(sm)
 
 
@@ -51,3 +51,5 @@ class Ship(pyglet.sprite.Sprite):
 
     def damage(self, dmg):
         self.damage_taken += dmg
+        if self.get_health() < 0:
+            self.alive = False

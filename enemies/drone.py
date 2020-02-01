@@ -1,5 +1,5 @@
 import ship
-import ship_components.ship_component_simple_phaser as smsp
+import ship_components.ship_component_laser as smsp
 import math
 import random
 
@@ -15,17 +15,17 @@ class Drone(ship.Ship):
         self.base_health = 30
 
         # just add 1 simple phaser in front of the ship :)
-        phaser = smsp.ShipComponentSimplePhaser(-16, 0, self)
-        self.upgrade(phaser)
+        laser = smsp.ShipComponentLaser(-16, 0, self, smsp.LaserType.SimpleLaser)
+        self.upgrade(laser)
 
     def update(self, dt):
-        super(Drone, self).update(dt)
-
         self.time += dt
         # fly up and down
         self.y += math.sin(self.time) * self.engine_power / self.mass * dt
         # fly to the left
         self.x -= 0.5 * self.engine_power / self.mass * dt
+
+        super(Drone, self).update(dt)
 
         # kill the drone if its out of screen
         if self.x < -50:

@@ -23,3 +23,7 @@ class BatchNames(Enum):
     Projectile_Batch = 2
     Player_Ship_Batch = 3
     Component_Batch = 4
+
+class LaserColors(Enum):
+    Player_Ship = (80, 80, 255)
+    Enemy_Ship = (255, 122, 65)

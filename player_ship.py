@@ -1,6 +1,6 @@
 import ship
 import globals
-import ship_components.ship_component_simple_phaser as smsp
+import ship_components.ship_component_laser as smsp
 from constants import Controls
 
 
@@ -8,16 +8,16 @@ class PlayerShip(ship.Ship):
     def __init__(self):
         super(PlayerShip, self).__init__(False)
 
-        # just add 5 simple phaser in front of the ship :)
-        self.upgrade(smsp.ShipComponentSimplePhaser(16, 0, self))
+        # just add 7 simple phaser in front of the ship :)
+        self.upgrade(smsp.ShipComponentLaser(16, 0, self, smsp.LaserType.SimpleLaser))
 
-        self.upgrade(smsp.ShipComponentSimplePhaser(12, -8, self))
-        self.upgrade(smsp.ShipComponentSimplePhaser(8, -16, self))
-        self.upgrade(smsp.ShipComponentSimplePhaser(4, -24, self))
+        self.upgrade(smsp.ShipComponentLaser(12, -8, self, smsp.LaserType.SimpleLaser))
+        self.upgrade(smsp.ShipComponentLaser(8, -16, self, smsp.LaserType.SimpleLaser))
+        self.upgrade(smsp.ShipComponentLaser(4, -24, self, smsp.LaserType.SimpleLaser))
 
-        self.upgrade(smsp.ShipComponentSimplePhaser(12, 8, self))
-        self.upgrade(smsp.ShipComponentSimplePhaser(8, 16, self))
-        self.upgrade(smsp.ShipComponentSimplePhaser(4, 24, self))
+        self.upgrade(smsp.ShipComponentLaser(12, 8, self, smsp.LaserType.SimpleLaser))
+        self.upgrade(smsp.ShipComponentLaser(8, 16, self, smsp.LaserType.SimpleLaser))
+        self.upgrade(smsp.ShipComponentLaser(4, 24, self, smsp.LaserType.SimpleLaser))
 
     def update(self, dt):
         """
