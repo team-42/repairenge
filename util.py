@@ -20,3 +20,6 @@ def center_image(image):
     """Sets an image's anchor point to its center"""
     image.anchor_x = image.width / 2
     image.anchor_y = image.height / 2
+
+def get_vector_length(v):
+    return math.sqrt(v[0] * v[0] + v[1] * v[1])

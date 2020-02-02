@@ -1,6 +1,6 @@
+import math
 import random
 from enum import Enum
-
 import util
 from projectiles.projectile_laser import ProjectileLaser
 from ship_components import ship_component
@@ -22,6 +22,8 @@ class ShipComponentLaser(ship_component.ShipComponent):
             image = globals.resources[Resources.Image_Ship_Module_Heavy_Laser]
         elif laser_type == LaserType.AngleLaser:
             image = globals.resources[Resources.Image_Ship_Module_Angle_Laser]
+        elif laser_type == LaserType.RailGun:
+            image = globals.resources[Resources.Image_Ship_Module_Railgun]
         else:
             image = globals.resources[Resources.Image_Ship_Module_Simple_Phaser]
         super(ShipComponentLaser, self).__init__(x, y, owner, image,
@@ -30,7 +32,6 @@ class ShipComponentLaser(ship_component.ShipComponent):
         self.cd = 1
         self.laser_type = laser_type
         self.speed = 800
-        self.angle = 90
         self.dmg = 0
         self.ts_check_fire = self.cd  #
         if owner.is_enemy:
@@ -52,48 +53,59 @@ class ShipComponentLaser(ship_component.ShipComponent):
 
     def update(self, dt):
         super(ShipComponentLaser, self).update(dt)
-        if self._owner is None :
+        if self._owner is None:
             return
 
         self.ts_check_fire -= dt
-        if (self._owner.is_enemy or
-            (not self._owner.is_enemy and
-             (globals.controls[Controls.Action_0] or globals.controls[Controls.Action_1]))) and self.ts_check_fire <= 0:
-
-            self.ts_check_fire = self.cd - 0.01 + 0.02 * random.random()
-
+        if self.ts_check_fire <= 0:
             # check: is this laser from the player or an enemy?
-            direction = -1 if self._owner.is_enemy else 1
+            is_player = False if self._owner.is_enemy else True
+            if not is_player:  # enemy
+                projectile = self.get_std_projectile(is_player)
+                if projectile is None and self.laser_type == LaserType.RailGun:
+                    projectile = self.get_rail_gun(self._owner.x + self._local_x, self._owner.y + self._local_y, is_player)
 
-            if self.laser_type == LaserType.SimpleLaser:
-                projectile = self.get_simple_laser_projectile(self._owner.x + self._local_x,
-                                                              self._owner.y + self._local_y, direction)
-            elif self.laser_type == LaserType.AngleLaser:
-                projectile = self.get_angle_laser(self._owner.x + self._local_x,
-                                                  self._owner.y + self._local_y, direction)
-            elif self.laser_type == LaserType.HeavyLaser:
-                projectile = self.get_heavy_laser(self._owner.x + self._local_x,
-                                                  self._owner.y + self._local_y, direction)
-            elif self.laser_type == LaserType.RailGun and (globals.controls[Controls.Action_1] or self._owner.is_enemy):
-                projectile = self.get_rail_gun(self._owner.x + self._local_x,
-                                                  self._owner.y + self._local_y, direction)
-
-            if self._owner.is_enemy:
+                self.ts_check_fire = self.cd - 0.01 + 0.02 * random.random()
+                print("enemy lasertype: {}".format(self.laser_type))
                 for proj in projectile:
                     globals.enemy_projectiles.append(proj)
-            else:
-                for proj in projectile:
-                    globals.player_projectiles.append(proj)
+            else: # player
+                if globals.controls[Controls.Action_0]:
+                    projectile = self.get_std_projectile(is_player)
+                    self.ts_check_fire = self.cd - 0.01 + 0.02 * random.random()
+                    print("my lasertype: {}".format(self.laser_type))
+                    for proj in projectile:
+                        globals.player_projectiles.append(proj)
+                elif globals.controls[Controls.Action_1]:
+                    projectile = self.get_rail_gun(self._owner.x + self._local_x, self._owner.y + self._local_y, is_player)
+                    self.ts_check_fire = self.cd - 0.01 + 0.02 * random.random()
+                    print("my lasertype: {}".format(self.laser_type))
+                    for proj in projectile:
+                        globals.player_projectiles.append(proj)
+
+    def get_std_projectile(self, is_player):
+        projectile = None
+        if self.laser_type == LaserType.SimpleLaser:
+            projectile = self.get_simple_laser_projectile(self._owner.x + self._local_x, self._owner.y + self._local_y, is_player)
+        elif self.laser_type == LaserType.AngleLaser:
+            projectile = self.get_angle_laser(self._owner.x + self._local_x, self._owner.y + self._local_y, is_player)
+        elif self.laser_type == LaserType.HeavyLaser:
+            projectile = self.get_heavy_laser(self._owner.x + self._local_x, self._owner.y + self._local_y, is_player)
+
+        return projectile
 
     def init_simple_laser(self):
         self.mass = 10
         self.dmg = 10
         self.cd = 1
         self.speed = 800
-        self.angle = 90
+        self.dir_vec = [1, 0]
 
-    def get_simple_laser_projectile(self, x, y, direction):
-        return [ProjectileLaser(x, y, direction * self.speed, self.angle, direction, self.dmg)]
+    def get_simple_laser_projectile(self, x, y, is_player):
+        projectile = ProjectileLaser(x, y, self.speed, self.dir_vec, is_player, self.dmg)
+        array = []
+        array.append(projectile)
+        return array
 
     def init_angle_laser(self):
         self.mass = 15
@@ -101,21 +113,23 @@ class ShipComponentLaser(ship_component.ShipComponent):
         self.cd = 1
         self.speed = 800
         # since two projectiles are created the diff between 90 and angle is taken and added to 90 for the other one
-        self.angle = 70
+        self.dir_vec = [1.0, 0.5]
+        length = util.get_vector_length(self.dir_vec)
+        self.dir_vec = [self.dir_vec[0] / length, self.dir_vec[1] / length]
 
-    def get_angle_laser(self, x, y, direction):
-        return [ProjectileLaser(x, y, direction * self.speed, self.angle, direction, self.dmg),
-                ProjectileLaser(x, y, direction * self.speed, (90 - self.angle) + 90, direction, self.dmg)]
+    def get_angle_laser(self, x, y, is_player):
+        return [ProjectileLaser(x, y, self.speed, self.dir_vec, is_player, self.dmg),
+                ProjectileLaser(x, y, self.speed, [self.dir_vec[0], -self.dir_vec[1]], is_player, self.dmg)]
 
     def init_heavy_laser(self):
         self.mass = 50
         self.dmg = 30
         self.cd = 3
         self.speed = 1000
-        self.angle = 90
+        self.dir_vec = [1, 0]
 
-    def get_heavy_laser(self, x, y, direction):
-        proj = ProjectileLaser(x, y, direction * self.speed, self.angle, direction, self.dmg)
+    def get_heavy_laser(self, x, y, is_player):
+        proj = ProjectileLaser(x, y, self.speed, self.dir_vec, is_player, self.dmg)
         proj.scale = 2.0
         return [proj]
 
@@ -124,12 +138,12 @@ class ShipComponentLaser(ship_component.ShipComponent):
         self.dmg = 100
         self.cd = 1
         self.speed = 2000
-        self.angle = 90
+        self.dir_vec = [1, 0]
 
-    def get_rail_gun(self, x, y, direction):
+    def get_rail_gun(self, x, y, is_player):
         closest_enemy = None
         closest_dist = 123123123
-        if not self._owner.is_enemy:
+        if is_player:
             for enemy in globals.enemies:
                 dist = util.distance((self.x, self.y), (enemy.x, enemy.y))
                 if dist < closest_dist:
@@ -140,10 +154,11 @@ class ShipComponentLaser(ship_component.ShipComponent):
 
         print("Closest Enemy for Railgun: {}/{}".format(closest_enemy.x, closest_enemy.y))
 
-        #angle = math.degrees(math.atan2(closest_enemy.y - y, closest_enemy.x - x))
+        # angle = math.degrees(math.atan2(closest_enemy.y - y, closest_enemy.x - x))
         angle = math.degrees(math.atan((closest_enemy.y - y) / (closest_enemy.x - x)))
-        #angle = angle if angle >= 0 else angle + 360
 
-        proj = ProjectileLaser(x, y, self.speed, angle, direction, self.dmg)
+        # angle = angle if angle >= 0 else angle + 360
+
+        proj = ProjectileLaser(x, y, self.speed, angle, is_player, self.dmg)
         proj.scale = 4.0
         return [proj]
