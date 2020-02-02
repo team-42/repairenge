@@ -145,6 +145,9 @@ class Repairenge:
         globals.resources[Resources.Image_Ship_Module_Railgun] = pyglet.resource.image(
             "resources/ship/component_onbase_railgun.png")
         util.center_image(globals.resources[Resources.Image_Ship_Module_Railgun])
+        globals.resources[Resources.Image_Ship_Module_Ram] = pyglet.resource.image(
+            "resources/ship/component_onbase_ram.png")
+        util.center_image(globals.resources[Resources.Image_Ship_Module_Ram])
 
         globals.resources[Resources.Image_Ship_Module_Hull] = pyglet.resource.image(
             "resources/ship/component_onbase_hull.png")

@@ -21,6 +21,7 @@ class Resources(Enum):
     Image_Ship_Module_Angle_Laser = 202
     Image_Ship_Module_Heavy_Laser = 203
     Image_Ship_Module_Railgun = 204
+    Image_Ship_Module_Ram = 205
     Image_Ship_Module_Hull = 210
     Image_Ship_Module_Repair = 211
     Image_Ship_Module_Shield = 212

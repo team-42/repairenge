@@ -5,6 +5,7 @@ import enemies.drone
 import enemies.frigate
 import enemies.reaper
 import enemies.freighter
+import enemies.hammerhead
 import globals
 from enemies.boss import Boss
 from enemies.tinyboss import TinyBoss
@@ -30,7 +31,7 @@ class StageOne(GameStage):
         return TinyBoss(x, y)
 
     def get_enemy(self, enemy_x, enemy_y):
-        return enemies.drone.Drone(enemy_x, enemy_y)
+        return enemies.hammerhead.Hammerhead(enemy_x, enemy_y)
 
     def get_num_enemies_to_defeat(self):
         return 10
