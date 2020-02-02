@@ -13,13 +13,12 @@ class ProjectileLaser(Projectile):
                                               globals.resources[Resources.Image_Projectiles_Energy_01],
                                               batch=globals.sprite_batches[BatchNames.Projectile_Batch],
                                               *args, *kwargs)
+        self.dir_vec = dir_vec.copy()
         if is_from_player:
             self.color = LaserColors.Player_Ship.value
-            self.dir_vec = dir_vec
         else:
             self.color = LaserColors.Enemy_Ship.value
-            self.dir_vec = dir_vec
-            self.dir_vec[0] *= -1
+            self.dir_vec[0] = -1 * self.dir_vec[0]
 
         self.scale = 1
         self.is_from_player = is_from_player

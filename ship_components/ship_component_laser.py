@@ -60,7 +60,7 @@ class ShipComponentLaser(ship_component.ShipComponent):
         if self.ts_check_fire <= 0:
             # check: is this laser from the player or an enemy?
             is_player = False if self._owner.is_enemy else True
-            if not is_player: # enemy
+            if not is_player:  # enemy
                 projectile = self.get_std_projectile(is_player)
                 if projectile is None and self.laser_type == LaserType.RailGun:
                     projectile = self.get_rail_gun(self._owner.x + self._local_x, self._owner.y + self._local_y, is_player)
@@ -102,7 +102,10 @@ class ShipComponentLaser(ship_component.ShipComponent):
         self.dir_vec = [1, 0]
 
     def get_simple_laser_projectile(self, x, y, is_player):
-        return [ProjectileLaser(x, y, self.speed, self.dir_vec, is_player, self.dmg)]
+        projectile = ProjectileLaser(x, y, self.speed, self.dir_vec, is_player, self.dmg)
+        array = []
+        array.append(projectile)
+        return array
 
     def init_angle_laser(self):
         self.mass = 15
