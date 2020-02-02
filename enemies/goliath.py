@@ -1,12 +1,12 @@
 import math
 
 import globals
-
 import ship_components.ship_component_laser as smsp
 from constants import Resources
 from enemies.enemy import StoryEnemy
 from ship_components.ship_component_heavy_hull import HeavyHull
 from ship_components.ship_component_jet import Jet
+from ship_components.ship_component_ram import Ram
 from ship_components.ship_component_repair_crane import RepairCrane
 
 
@@ -26,23 +26,28 @@ class Goliath(StoryEnemy):
         self.upgrade(RepairCrane(1, 5, self))
 
         for y in range(-5, 6):
-            self.upgrade(smsp.ShipComponentLaser(-1, y, self, smsp.LaserType.HeavyLaser))
+            if y % 2 == 0:
+                self.upgrade(smsp.ShipComponentLaser(-1, y, self, smsp.LaserType.HeavyLaser))
+                self.upgrade(HeavyHull(2, y, self))
+            else:
+                self.upgrade(HeavyHull(-1, y, self))
+                self.upgrade(smsp.ShipComponentLaser(2, y, self, smsp.LaserType.HeavyLaser))
+
             self.upgrade(HeavyHull(0, y, self))
             self.upgrade(HeavyHull(1, y, self))
-            self.upgrade(smsp.ShipComponentLaser(2, y, self, smsp.LaserType.AngleLaser))
 
         for y in range(-4, 5):
             self.upgrade(smsp.ShipComponentLaser(-2, y, self, smsp.LaserType.SimpleLaser))
             self.upgrade(smsp.ShipComponentLaser(3, y, self, smsp.LaserType.SimpleLaser))
 
         for y in range(-3, 4):
-            self.upgrade(HeavyHull(-3, y, self))
+            self.upgrade(Ram(-3, y, self))
             self.upgrade(Jet(4, y, self))
 
     def update(self, dt):
         self._healthbar.update()
         self._shieldbar.update()
-        self.time += dt / (1_400_000 / self.engine_power)
+        self.time += dt / (1_550_000 / self.engine_power)
         # fly up and down
         self.y += math.sin(self.time) * self.engine_power / self.mass * dt
         # fly to the left
