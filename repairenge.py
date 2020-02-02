@@ -4,10 +4,10 @@ import pyglet
 from pyglet.text import Label
 from pyglet.window import key
 
+import enemies.behemoth
 import enemies.drone
 import enemies.frigate
 import enemies.reaper
-import enemies.behemoth
 import globals
 import player_ship
 import ship
@@ -298,10 +298,10 @@ class Repairenge:
             enemy_y = random.random() * (globals.window.height / 4) + globals.window.height / 2
             if self.game_condition == CONDITION_RUNNING:
                 enemy_type = random.randint(0, 100)
-                if enemy_type < globals.defeated_enemies / 6:
+                if enemy_type < globals.defeated_enemies / 2:
                     # behemoth
                     enemy = enemies.behemoth.Behemoth(enemy_x, enemy_y)
-                if enemy_type < globals.defeated_enemies:
+                elif enemy_type < globals.defeated_enemies:
                     # reaper
                     enemy = enemies.reaper.Reaper(enemy_x, enemy_y)
                 elif enemy_type < globals.defeated_enemies * 2:

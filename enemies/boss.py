@@ -18,7 +18,7 @@ class Boss(ship.Ship):
         self.y = y
         self.engine_power = self.engine_power / 2.0
         self.time = random.random() * 2.0 * 3.1415
-        self.base_health = 100
+        self.base_health = 300
 
         self.upgrade(smsp.ShipComponentLaser(-2, 1, self, smsp.LaserType.SimpleLaser))
         self.upgrade(smsp.ShipComponentLaser(-2, -1, self, smsp.LaserType.SimpleLaser))
