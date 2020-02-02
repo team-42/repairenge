@@ -176,6 +176,8 @@ class Repairenge:
         :return:
         """
         for key, batch in globals.sprite_batches.items():
+            if key == BatchNames.Player_Ship_Batch and not globals.player_ship.alive:
+                continue
             # print(key)
             batch.draw()
         if self.game_condition == CONDITION_LOSS:
@@ -199,6 +201,8 @@ class Repairenge:
                     if isinstance(list_of_things[i], StoryEnemy):
                         if self.current_stage + 1 == self._game_stages.__len__():
                             self.game_condition = CONDITION_WIN
+                            self._music_queue.play_victory()
+                            self._player.next_source()
                         else:
                             self.current_stage += 1
                             self._music_queue.finished_boss_fight()
@@ -284,8 +288,6 @@ class Repairenge:
         :param dt:
         :return:
         """
-        if self.game_condition < CONDITION_RUNNING:
-            return
         # print(self.controls)
         self._starfield.update(dt)
 
@@ -304,7 +306,8 @@ class Repairenge:
         # 4: player_ship vs free components
         self.check_collision_between_player_and_components()
 
-        globals.player_ship.update(dt)
+        if globals.player_ship.alive:
+            globals.player_ship.update(dt)
 
         # update all projectiles and delete them if they are not alive
         self._update_and_delete(globals.player_projectiles, dt)
@@ -324,7 +327,7 @@ class Repairenge:
                 enemy = self._game_stages[self.current_stage].get_enemy(enemy_x, enemy_y)
                 globals.enemies.append(enemy)
             elif self.game_condition == CONDITION_SPAWN_BOSS:
-                if self.current_stage == 0:
+                if self.current_stage < 2:
                     self._music_queue.start_short_boss_fight()
                 else:
                     self._music_queue.start_boss_fight()
@@ -385,6 +388,8 @@ class Repairenge:
             if loss:
                 self.game_condition = CONDITION_LOSS
                 player_ship.alive = False
+                self._music_queue.play_loss()
+                self._player.next_source()
                 print("Game condition has changed to LOSS")
             elif boss:
                 self.game_condition = CONDITION_SPAWN_BOSS
