@@ -11,6 +11,8 @@ from ship_components.ship_component_ram import Ram
 RAM_IDLE = 0
 RAM_FORWARD = 1
 RAM_RETURN = 2
+RAMMING_SPEED = 4
+RAM_PROBABILITY = 0.01
 
 
 class RamBoss(StoryEnemy):
@@ -20,9 +22,10 @@ class RamBoss(StoryEnemy):
         super(RamBoss, self).__init__(True, Resources.Image_Ship_Module_Enemy)
         self.x = x
         self.y = 112
-        self.engine_power = self.engine_power / 2.0
+        self.engine_power = self.engine_power / 1.5
         self.time = 0
-        self.base_health = 100
+        self.base_health = 200
+        self.drop_rate = 0.2
 
         self.upgrade(Ram(1, -3, self))
         self.upgrade(Ram(-0, -2, self))
@@ -51,29 +54,27 @@ class RamBoss(StoryEnemy):
 
     def update(self, dt):
         if self.ram_attack == RAM_FORWARD:
-            self.time += dt
             # fly to the left
             self.x -= 0.5 * self.engine_power / self.mass * dt
             if self.x <= 50:
                 self.ram_attack = RAM_RETURN
         elif self.ram_attack == RAM_RETURN:
-            self.time += dt
             # fly to the right
             self.x += 0.5 * self.engine_power / self.mass * dt
             if self.x > globals.window.width * 0.85:
                 self.ram_attack = RAM_IDLE
-                self.engine_power /= 2
-        elif self.time > 5 and random.random() < 0.01:
+                self.engine_power /= RAMMING_SPEED
+        elif self.time > 5 and random.random() < RAM_PROBABILITY + (1 - self.get_health_percentage() / 100):
             self.ram_attack = RAM_FORWARD
-            self.engine_power *= 2
-
-        # fly up and down
-        self.y += math.sin(self.time) * self.engine_power * dt / (self.mass * 1.8)
-        # fly to the left
-        if self.x > globals.window.width * 0.85:
-            self.x -= 0.5 * self.engine_power / self.mass * dt
+            self.engine_power *= RAMMING_SPEED
+        else:
+            self.time += dt
+            # fly up and down
+            self.y += math.sin(self.time) * self.engine_power * dt / (self.mass * 1.8)
+            # fly to the left
+            if self.x > globals.window.width * 0.85:
+                self.x -= 0.5 * self.engine_power / self.mass * dt
 
         self._healthbar.update()
         self._shieldbar.update()
-        self.time += dt
         super(StoryEnemy, self).update(dt)

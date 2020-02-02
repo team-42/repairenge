@@ -10,6 +10,8 @@ from collections import deque
 class Ship(pyglet.sprite.Sprite):
     base_shield: int
 
+    drop_rate = 0.8
+
     def __init__(self, is_enemy, resource, *args, **kwargs):
         if is_enemy:
             batch = globals.sprite_batches[BatchNames.Enemy_Batch]
@@ -72,7 +74,7 @@ class Ship(pyglet.sprite.Sprite):
                 for module in self.modules:
                     count_on_player_ship = globals.player_ship.get_count_of_component_type(module)
                     print("Count of {} on player ship is {}".format(type(module), count_on_player_ship))
-                    if random.random() < pow(0.8, 1 + count_on_player_ship):
+                    if random.random() < pow(self.drop_rate, 1 + count_on_player_ship):
                         module._local_x = 0
                         module._local_y = 0
                         module._owner = None
