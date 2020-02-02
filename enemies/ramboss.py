@@ -20,7 +20,7 @@ class RamBoss(StoryEnemy):
     ram_attack = RAM_IDLE
 
     def __init__(self, x, y):
-        super(RamBoss, self).__init__(True, Resources.Image_Ship_Module_Enemy)
+        super(RamBoss, self).__init__(True, Resources.Image_Ship_Module_Enemy_Large)
         self.x = x
         self.y = 112
         self.engine_power = self.engine_power / 1.5

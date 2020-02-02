@@ -1,4 +1,6 @@
-import random
+import math
+
+import globals
 
 import ship_components.ship_component_laser as smsp
 from constants import Resources
@@ -12,9 +14,9 @@ class Goliath(StoryEnemy):
     def __init__(self, x, y):
         super(Goliath, self).__init__(True, Resources.Image_Ship_Module_Enemy_Boss)
         self.x = x
-        self.y = y
-        self.engine_power = self.engine_power / 2.0
-        self.time = random.random() * 2.0 * 3.1415
+        self.y = globals.window.height / 2 - 32 * 5 - 16
+        self.engine_power = self.engine_power / 2
+        self.time = 0
         self.base_health = 300
 
         self.upgrade(RepairCrane(1, -5, self))
@@ -36,3 +38,15 @@ class Goliath(StoryEnemy):
         for y in range(-3, 4):
             self.upgrade(HeavyHull(-3, y, self))
             self.upgrade(Jet(4, y, self))
+
+    def update(self, dt):
+        self._healthbar.update()
+        self._shieldbar.update()
+        self.time += dt / (1_400_000 / self.engine_power)
+        # fly up and down
+        self.y += math.sin(self.time) * self.engine_power / self.mass * dt
+        # fly to the left
+        if self.x > globals.window.width * 0.85:
+            self.x -= 0.5 * self.engine_power / self.mass * dt
+
+        super(StoryEnemy, self).update(dt)
