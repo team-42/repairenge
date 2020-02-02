@@ -37,11 +37,6 @@ window.push_handlers(keyboard)
 
 devices = pyglet.input.get_devices()
 
-player = pyglet.media.Player()
-player.queue(MusicQueue())
-player.play()
-
-
 class Repairenge:
     """
     main class with update, draw ...
@@ -60,6 +55,10 @@ class Repairenge:
         self._window = window
         self._devices = devices
         self._keyboard = keyboard
+        self._player = pyglet.media.Player()
+        self._music_queue = MusicQueue()
+        self._player.queue(self._music_queue)
+        self._player.play()
 
         # the players ship
         globals.player_ship = player_ship.PlayerShip()
@@ -202,6 +201,8 @@ class Repairenge:
                             self.game_condition = CONDITION_WIN
                         else:
                             self.current_stage += 1
+                            self._music_queue.finished_boss_fight()
+                            self._player.next_source()
                             self.game_condition = CONDITION_RUNNING
                             globals.defeated_enemies = 0
                 # delete the sprite and vertices from the batch
@@ -323,6 +324,11 @@ class Repairenge:
                 enemy = self._game_stages[self.current_stage].get_enemy(enemy_x, enemy_y)
                 globals.enemies.append(enemy)
             elif self.game_condition == CONDITION_SPAWN_BOSS:
+                if self.current_stage == 0:
+                    self._music_queue.start_short_boss_fight()
+                else:
+                    self._music_queue.start_boss_fight()
+                self._player.next_source()
                 self.boss = self._game_stages[self.current_stage].get_boss(enemy_x, enemy_y)
                 globals.enemies.append(self.boss)
                 print("Game condition has changed to BOSS")
@@ -383,6 +389,10 @@ class Repairenge:
             elif boss:
                 self.game_condition = CONDITION_SPAWN_BOSS
                 print("Game condition has changed to SPAWN_BOSS")
+
+    def finish(self):
+        self._music_queue.finish()
+        self._player.delete()
 
 
 repairenge = Repairenge(window, devices, keyboard)
@@ -465,4 +475,4 @@ def on_draw():
 
 pyglet.clock.schedule_interval(update, 1.0 / 60)
 pyglet.app.run()
-player.delete()
+repairenge.finish()
