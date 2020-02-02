@@ -4,10 +4,7 @@ import pyglet
 from pyglet.text import Label
 from pyglet.window import key
 
-import enemies.behemoth
-import enemies.drone
-import enemies.frigate
-import enemies.reaper
+import game_stage
 import globals
 import player_ship
 import ship
@@ -17,13 +14,13 @@ from constants import BatchNames
 from constants import Controls
 from constants import Resources
 from enemies.boss import Boss
+from enemies.enemy import StoryEnemy
 
 CONDITION_RUNNING = 1
 CONDITION_SPAWN_BOSS = 2
 CONDITION_BOSS = 3
 CONDITION_LOSS = -1
 CONDITION_WIN = -2
-NUM_ENEMIES_TO_DEFEAT = 30
 
 # raw_names on ps4 controller
 controls_to_follow = ["ABS_RX", "ABS_RY", "ABS_X", "ABS_Y", "BTN_TL", "BTN_TR", "BTN_TL2", "BTN_TR2", "BTN_A", "BTN_B",
@@ -53,6 +50,7 @@ class Repairenge:
     victory_label: Label
     game_over_label: Label
     game_condition: int = CONDITION_RUNNING
+    current_stage: int = 0
     boss: Boss
 
     def __init__(self, window, devices, keyboard):
@@ -69,6 +67,7 @@ class Repairenge:
 
         # the background starfield
         self._starfield = starfield.StarField(100)
+        self._game_stages = [game_stage.StageOne(), game_stage.StageTwo()]
 
         self.game_over_label = pyglet.text.Label('Game Over',
                                                  font_name='Arial',
@@ -185,8 +184,13 @@ class Repairenge:
             if not list_of_things[i].alive:
                 if isinstance(list_of_things[i], ship.Ship):
                     print("Delete thing {}".format(list_of_things[i]))
-                    if isinstance(list_of_things[i], Boss):
-                        self.game_condition = CONDITION_WIN
+                    if isinstance(list_of_things[i], StoryEnemy):
+                        if self.current_stage + 1 == self._game_stages.__len__():
+                            self.game_condition = CONDITION_WIN
+                        else:
+                            self.current_stage += 1
+                            self.game_condition = CONDITION_RUNNING
+                            globals.defeated_enemies = 0
                 # delete the sprite and vertices from the batch
                 list_of_things[i].delete()
                 if hasattr(list_of_things[i], 'modules'):
@@ -302,22 +306,10 @@ class Repairenge:
             enemy_x = globals.window.width + 50
             enemy_y = random.random() * (globals.window.height / 4) + globals.window.height / 2
             if self.game_condition == CONDITION_RUNNING:
-                enemy_type = random.randint(0, 100)
-                if enemy_type < globals.defeated_enemies / 2:
-                    # behemoth
-                    enemy = enemies.behemoth.Behemoth(enemy_x, enemy_y)
-                elif enemy_type < globals.defeated_enemies:
-                    # reaper
-                    enemy = enemies.reaper.Reaper(enemy_x, enemy_y)
-                elif enemy_type < globals.defeated_enemies * 2.5:
-                    # frigate
-                    enemy = enemies.frigate.Frigate(enemy_x, enemy_y)
-                else:
-                    enemy = enemies.drone.Drone(enemy_x, enemy_y)
+                enemy = self._game_stages[self.current_stage].get_enemy(enemy_x, enemy_y)
                 globals.enemies.append(enemy)
             elif self.game_condition == CONDITION_SPAWN_BOSS:
-                self.boss = Boss(enemy_x,
-                                 enemy_y)
+                self.boss = self._game_stages[self.current_stage].get_boss(enemy_x, enemy_y)
                 globals.enemies.append(self.boss)
                 print("Game condition has changed to BOSS")
                 self.game_condition = CONDITION_BOSS
@@ -368,7 +360,8 @@ class Repairenge:
     def update_game_condition(self):
         if self.game_condition >= CONDITION_RUNNING:
             loss = globals.player_ship.get_health() <= 0
-            boss = globals.defeated_enemies >= NUM_ENEMIES_TO_DEFEAT and self.game_condition == CONDITION_RUNNING
+            boss = globals.defeated_enemies >= self._game_stages[
+                self.current_stage].get_num_enemies_to_defeat() and self.game_condition == CONDITION_RUNNING
             if loss:
                 self.game_condition = CONDITION_LOSS
                 player_ship.alive = False

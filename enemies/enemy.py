@@ -1,9 +1,9 @@
 import math
 import random
 
+import globals
 import ship
-import ship_components.ship_component_laser as smsp
-from constants import Resources
+from healthbar import Healthbar
 
 
 class Enemy(ship.Ship):
@@ -23,6 +23,27 @@ class Enemy(ship.Ship):
         self.x -= 0.5 * self.engine_power / self.mass * dt
 
         super(Enemy, self).update(dt)
+
+        # kill the drone if its out of screen
+        if self.x < -50:
+            self.alive = False
+
+
+class StoryEnemy(ship.Ship):
+    def __init__(self, is_enemy, resource, *args, **kwargs):
+        super().__init__(is_enemy, resource, *args, **kwargs)
+        self._healthbar = Healthbar(self)
+
+    def update(self, dt):
+        self._healthbar.update()
+        self.time += dt
+        # fly up and down
+        self.y += math.sin(self.time) * self.engine_power / self.mass * dt
+        # fly to the left
+        if self.x > globals.window.width * 0.75:
+            self.x -= 0.5 * self.engine_power / self.mass * dt
+
+        super(StoryEnemy, self).update(dt)
 
         # kill the drone if its out of screen
         if self.x < -50:

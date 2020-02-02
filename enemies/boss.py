@@ -1,21 +1,19 @@
 import math
 import random
 
+from enemies.enemy import StoryEnemy
 import globals
-import ship
 import ship_components.ship_component_laser as smsp
+from constants import Resources
+from healthbar import Healthbar
 from ship_components.ship_component_heavy_hull import HeavyHull
 from ship_components.ship_component_jet import Jet
 from ship_components.ship_component_repair_crane import RepairCrane
-from constants import Resources
-from healthbar import Healthbar
 
 
-class Boss(ship.Ship):
+class Boss(StoryEnemy):
     def __init__(self, x, y):
         super(Boss, self).__init__(True, Resources.Image_Ship_Module_Enemy_Boss)
-        self._healthbar = Healthbar(self)
-
         self.x = x
         self.y = y
         self.engine_power = self.engine_power / 2.0
@@ -43,18 +41,3 @@ class Boss(ship.Ship):
         self.upgrade(Jet(1, -1, self))
         self.upgrade(Jet(2, 0, self))
         self.upgrade(Jet(1, 1, self))
-
-    def update(self, dt):
-        self._healthbar.update()
-        self.time += dt
-        # fly up and down
-        self.y += math.sin(self.time) * self.engine_power / self.mass * dt
-        # fly to the left
-        if self.x > globals.window.width * 0.75:
-            self.x -= 0.5 * self.engine_power / self.mass * dt
-
-        super(Boss, self).update(dt)
-
-        # kill the drone if its out of screen
-        if self.x < -50:
-            self.alive = False
