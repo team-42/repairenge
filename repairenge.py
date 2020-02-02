@@ -304,7 +304,7 @@ class Repairenge:
                 elif enemy_type < globals.defeated_enemies:
                     # reaper
                     enemy = enemies.reaper.Reaper(enemy_x, enemy_y)
-                elif enemy_type < globals.defeated_enemies * 2:
+                elif enemy_type < globals.defeated_enemies * 2.5:
                     # frigate
                     enemy = enemies.frigate.Frigate(enemy_x, enemy_y)
                 else:
