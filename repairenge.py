@@ -35,7 +35,18 @@ globals.window = window
 keyboard = key.KeyStateHandler()
 window.push_handlers(keyboard)
 
+# joystick
+joystick = None
+try:
+    joysticks = pyglet.input.get_joysticks()
+    joystick = joysticks[0]
+    joystick.open()
+except:
+    print("no controller connected")
+    joystick = None
+
 devices = pyglet.input.get_devices()
+
 
 class Repairenge:
     """
@@ -47,7 +58,7 @@ class Repairenge:
     current_stage: int = 0
     boss: Boss
 
-    def __init__(self, window, devices, keyboard):
+    def __init__(self, window, devices, keyboard, joystick):
 
         # first: load resourcess
         self._load_resources()
@@ -55,6 +66,9 @@ class Repairenge:
         self._window = window
         self._devices = devices
         self._keyboard = keyboard
+        # joystick/ controller things
+        self.joystick = joystick
+
         self._player = pyglet.media.Player()
         self._music_queue = MusicQueue()
         self._player.queue(self._music_queue)
@@ -288,6 +302,8 @@ class Repairenge:
         :param dt:
         :return:
         """
+        self._joystick_update()
+
         # print(self.controls)
         self._starfield.update(dt)
 
@@ -379,6 +395,39 @@ class Repairenge:
         elif symbol == key.ENTER:
             globals.controls[Controls.Action_1] = False
 
+    def _joystick_update(self):
+        threshold = 0.2
+        if self.joystick is not None:
+            if joystick.x < -threshold:
+                globals.controls[Controls.Left] = True
+                globals.controls[Controls.Right] = False
+            elif joystick.x > threshold:
+                globals.controls[Controls.Right] = True
+                globals.controls[Controls.Left] = False
+            else:
+                globals.controls[Controls.Right] = False
+                globals.controls[Controls.Left] = False
+
+            if joystick.y < -threshold:
+                globals.controls[Controls.Up] = True
+                globals.controls[Controls.Down] = False
+            elif joystick.y > threshold:
+                globals.controls[Controls.Down] = True
+                globals.controls[Controls.Up] = False
+            else:
+                globals.controls[Controls.Down] = False
+                globals.controls[Controls.Up] = False
+
+            if joystick.buttons[0]:
+                globals.controls[Controls.Action_0] = True
+            else:
+                globals.controls[Controls.Action_0] = False
+
+            if joystick.buttons[1]:
+                globals.controls[Controls.Action_1] = True
+            else:
+                globals.controls[Controls.Action_1] = False
+
     # Checks for win and loss of the game
     def update_game_condition(self):
         if self.game_condition >= CONDITION_RUNNING:
@@ -400,72 +449,8 @@ class Repairenge:
         self._player.delete()
 
 
-repairenge = Repairenge(window, devices, keyboard)
+repairenge = Repairenge(window, devices, keyboard, joystick)
 window.push_handlers(repairenge)
-
-
-def watch_control(device, control):
-    """
-    method for input device monitoring - noobstick
-    :param device:
-    :param control:
-    :param obj:
-    :return:
-    """
-
-    @control.event
-    def on_change(value):
-        if control.raw_name == "ABS_X":
-            if value < 110:
-                globals.controls[Controls.Left] = True
-                globals.controls[Controls.Right] = False
-            elif value > 140:
-                globals.controls[Controls.Right] = True
-                globals.controls[Controls.Left] = False
-            else:
-                globals.controls[Controls.Right] = False
-                globals.controls[Controls.Left] = False
-
-        if control.raw_name == "ABS_Y":
-            if value < 110:
-                globals.controls[Controls.Up] = True
-                globals.controls[Controls.Down] = False
-            elif value > 140:
-                globals.controls[Controls.Down] = True
-                globals.controls[Controls.Up] = False
-            else:
-                globals.controls[Controls.Down] = False
-                globals.controls[Controls.Up] = False
-
-    if isinstance(control, pyglet.input.base.Button):
-        @control.event
-        def on_press():
-            if control.raw_name == "BTN_A":
-                globals.controls[Controls.Action_0] = True
-            elif control.raw_name == "BTN_B":
-                globals.controls[Controls.Action_1] = True
-
-        @control.event
-        def on_release():
-            if control.raw_name == "BTN_A":
-                globals.controls[Controls.Action_0] = False
-            elif control.raw_name == "BTN_B":
-                globals.controls[Controls.Action_1] = False
-
-
-# search for ps4 controller (or other things with controller in its name)
-# only tested with ps4 dualshock controller
-# print('Devices:')
-for device in devices:
-    if "Controller" in device.name:
-        try:
-            device.open(window=window)
-            for control in device.get_controls():
-                if control.name in controls_to_follow or control.raw_name in controls_to_follow:
-                    watch_control(device, control)
-
-        except pyglet.input.DeviceException:
-            print('Fail')
 
 
 def update(dt):
