@@ -9,6 +9,7 @@ import enemies.reaper
 import globals
 from enemies.boss import Boss
 from enemies.goliath import Goliath
+from enemies.ramboss import RamBoss
 from enemies.tinyboss import TinyBoss
 
 
@@ -42,7 +43,7 @@ class StageOne(GameStage):
 
 class StageTwo(GameStage):
     def get_boss(self, x, y):
-        return TinyBoss(x, y)
+        return RamBoss(x, y)
 
     def get_enemy(self, enemy_x, enemy_y):
         enemy_type = random.randint(0, 100)
