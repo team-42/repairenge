@@ -1,5 +1,3 @@
-import math
-
 from projectiles.projectile import Projectile
 import globals
 from constants import Resources

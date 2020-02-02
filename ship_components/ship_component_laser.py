@@ -62,26 +62,23 @@ class ShipComponentLaser(ship_component.ShipComponent):
             is_player = False if self._owner.is_enemy else True
             if not is_player:  # enemy
                 projectile = self.get_std_projectile(is_player)
-                if projectile is None and self.laser_type == LaserType.RailGun:
+                if not projectile and self.laser_type == LaserType.RailGun:
                     projectile = self.get_rail_gun(self._owner.x + self._local_x, self._owner.y + self._local_y,
                                                    is_player)
 
                 self.ts_check_fire = self.cd - 0.01 + 0.02 * random.random()
-                print("enemy lasertype: {}".format(self.laser_type))
                 for proj in projectile:
                     globals.enemy_projectiles.append(proj)
             else:  # player
                 if globals.controls[Controls.Action_0]:
                     projectile = self.get_std_projectile(is_player)
                     self.ts_check_fire = self.cd - 0.01 + 0.02 * random.random()
-                    print("my lasertype: {}".format(self.laser_type))
                     for proj in projectile:
                         globals.player_projectiles.append(proj)
                 elif globals.controls[Controls.Action_1] and LaserType.RailGun == self.laser_type:
                     projectile = self.get_rail_gun(self._owner.x + self._local_x, self._owner.y + self._local_y,
                                                    is_player)
                     self.ts_check_fire = self.cd - 0.01 + 0.02 * random.random()
-                    print("my lasertype: {}".format(self.laser_type))
                     for proj in projectile:
                         globals.player_projectiles.append(proj)
 
@@ -157,7 +154,6 @@ class ShipComponentLaser(ship_component.ShipComponent):
 
         if closest_enemy is None:
             return []
-        print("Closest Enemy for Railgun: {}/{}".format(closest_enemy.x, closest_enemy.y))
 
         target_vec = [0, 0]
         target_vec[0] = closest_enemy.x - self.x
@@ -165,6 +161,10 @@ class ShipComponentLaser(ship_component.ShipComponent):
         length = util.get_vector_length(target_vec)
         target_vec[0] /= length
         target_vec[1] /= length
+
+        # black magic
+        if not is_player:
+            target_vec[0] = -1 * target_vec[0]
 
         proj = ProjectileLaser(x, y, self.speed, target_vec, is_player, self.dmg)
         proj.scale = 4.0
