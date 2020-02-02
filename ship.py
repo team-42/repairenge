@@ -85,5 +85,5 @@ class Ship(pyglet.sprite.Sprite):
 
     def damage(self, dmg):
         self.damage_taken += dmg
-        if self.get_health() < 0:
+        if self.get_health() <= 0:
             self.alive = False

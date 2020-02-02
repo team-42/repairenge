@@ -1,6 +1,7 @@
 import random
 from enum import Enum
 
+import util
 from projectiles.projectile_laser import ProjectileLaser
 from ship_components import ship_component
 import globals
@@ -12,6 +13,7 @@ class LaserType(Enum):
     SimpleLaser = 1
     AngleLaser = 2
     HeavyLaser = 3
+    RailGun = 4
 
 
 class ShipComponentLaser(ship_component.ShipComponent):
@@ -41,6 +43,8 @@ class ShipComponentLaser(ship_component.ShipComponent):
             self.init_angle_laser()
         elif self.laser_type == LaserType.HeavyLaser:
             self.init_heavy_laser()
+        elif self.laser_type == LaserType.RailGun:
+            self.init_rail_gun()
 
         self.ts_check_fire = self.cd
         ship.mass += self.mass
@@ -51,7 +55,10 @@ class ShipComponentLaser(ship_component.ShipComponent):
             return
 
         self.ts_check_fire -= dt
-        if (self._owner.is_enemy or (not self._owner.is_enemy and globals.controls[Controls.Action_0])) and self.ts_check_fire <= 0:
+        if (self._owner.is_enemy or
+            (not self._owner.is_enemy and
+             (globals.controls[Controls.Action_0] or globals.controls[Controls.Action_1]))) and self.ts_check_fire <= 0:
+
             self.ts_check_fire = self.cd - 0.01 + 0.02 * random.random()
 
             # check: is this laser from the player or an enemy?
@@ -65,6 +72,9 @@ class ShipComponentLaser(ship_component.ShipComponent):
                                                   self._owner.y + self._local_y, direction)
             elif self.laser_type == LaserType.HeavyLaser:
                 projectile = self.get_heavy_laser(self._owner.x + self._local_x,
+                                                  self._owner.y + self._local_y, direction)
+            elif self.laser_type == LaserType.RailGun and (globals.controls[Controls.Action_1] or self._owner.is_enemy):
+                projectile = self.get_rail_gun(self._owner.x + self._local_x,
                                                   self._owner.y + self._local_y, direction)
 
             if self._owner.is_enemy:
@@ -106,4 +116,33 @@ class ShipComponentLaser(ship_component.ShipComponent):
     def get_heavy_laser(self, x, y, direction):
         proj = ProjectileLaser(x, y, direction * self.speed, self.angle, direction, self.dmg)
         proj.scale = 2.0
+        return [proj]
+
+    def init_rail_gun(self):
+        self.mass = 300
+        self.dmg = 100
+        self.cd = 1
+        self.speed = 2000
+        self.angle = 90
+
+    def get_rail_gun(self, x, y, direction):
+        closest_enemy = None
+        closest_dist = 123123123
+        if not self._owner.is_enemy:
+            for enemy in globals.enemies:
+                dist = util.distance((self.x, self.y), (enemy.x, enemy.y))
+                if dist < closest_dist:
+                    closest_dist = dist
+                    closest_enemy = enemy
+        else:
+            closest_enemy = globals.player_ship
+
+        print("Closest Enemy for Railgun: {}/{}".format(closest_enemy.x, closest_enemy.y))
+
+        #angle = math.degrees(math.atan2(closest_enemy.y - y, closest_enemy.x - x))
+        angle = math.degrees(math.atan((closest_enemy.y - y) / (closest_enemy.x - x)))
+        #angle = angle if angle >= 0 else angle + 360
+
+        proj = ProjectileLaser(x, y, self.speed, angle, direction, self.dmg)
+        proj.scale = 4.0
         return [proj]
