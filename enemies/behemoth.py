@@ -7,7 +7,7 @@ from constants import Resources
 
 class Behemoth(enemies.enemy.Enemy):
     def __init__(self, x, y):
-        super(Behemoth, self).__init__(x, y, Resources.Image_Ship_Module_Enemy_Large)
+        super(Behemoth, self).__init__(x, y, Resources.Image_Ship_Module_Enemy_Medium2)
 
         self.base_health = 150
 

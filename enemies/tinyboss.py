@@ -1,14 +1,8 @@
-import math
 import random
 
-from enemies.enemy import StoryEnemy
-import globals
 import ship_components.ship_component_laser as smsp
 from constants import Resources
-from healthbar import Healthbar
-from ship_components.ship_component_heavy_hull import HeavyHull
-from ship_components.ship_component_jet import Jet
-from ship_components.ship_component_repair_crane import RepairCrane
+from enemies.enemy import StoryEnemy
 
 
 class TinyBoss(StoryEnemy):

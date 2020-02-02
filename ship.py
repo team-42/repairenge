@@ -7,6 +7,8 @@ from constants import BatchNames
 
 
 class Ship(pyglet.sprite.Sprite):
+    base_shield: int
+
     def __init__(self, is_enemy, resource, *args, **kwargs):
         if is_enemy:
             batch = globals.sprite_batches[BatchNames.Enemy_Batch]
@@ -36,6 +38,8 @@ class Ship(pyglet.sprite.Sprite):
         self.base_health = 200
         self.health_multiplier = 1.0
         self.damage_taken = 0
+        self.base_shield = 0
+        self.shield_damage_taken = 0
         self.current_health = self.base_health * self.health_multiplier
 
         # ship movement properties
@@ -44,6 +48,11 @@ class Ship(pyglet.sprite.Sprite):
 
         # modules
         self.modules = list()
+
+        pyglet.clock.schedule_interval(self.regenerate_shields, 0.2)
+
+    def regenerate_shields(self, dt):
+        self.shield_damage_taken -= min(self.shield_damage_taken, int(self.base_shield / 10))
 
     def update(self, dt):
         """
@@ -96,7 +105,17 @@ class Ship(pyglet.sprite.Sprite):
     def get_health_percentage(self):
         return self.get_health() * 100 / self.get_max_health()
 
+    def get_shield_percentage(self):
+        if self.base_shield == 0:
+            return 0
+        else:
+            return (self.base_shield - self.shield_damage_taken) * 100 / self.base_shield
+
     def damage(self, dmg):
+        if dmg > 0 and self.base_shield - self.shield_damage_taken > 0:
+            absorbed_by_shield = min(dmg, self.base_shield - self.shield_damage_taken)
+            self.shield_damage_taken += absorbed_by_shield
+            dmg -= absorbed_by_shield
         self.damage_taken += dmg
         if self.get_health() <= 0:
             self.alive = False

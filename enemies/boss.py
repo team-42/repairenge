@@ -1,14 +1,12 @@
-import math
 import random
 
-from enemies.enemy import StoryEnemy
-import globals
 import ship_components.ship_component_laser as smsp
 from constants import Resources
-from healthbar import Healthbar
+from enemies.enemy import StoryEnemy
 from ship_components.ship_component_heavy_hull import HeavyHull
 from ship_components.ship_component_jet import Jet
 from ship_components.ship_component_repair_crane import RepairCrane
+from ship_components.ship_component_shield import Shield
 
 
 class Boss(StoryEnemy):
@@ -31,9 +29,9 @@ class Boss(StoryEnemy):
 
         self.upgrade(HeavyHull(0, -2, self))
         self.upgrade(HeavyHull(1, -2, self))
-        self.upgrade(HeavyHull(-2, 0, self))
         self.upgrade(HeavyHull(0, 2, self))
         self.upgrade(HeavyHull(1, 2, self))
+        self.upgrade(Shield(-2, 0, self))
 
         self.upgrade(RepairCrane(0, -1, self))
         self.upgrade(RepairCrane(0, 1, self))

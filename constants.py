@@ -20,8 +20,10 @@ class Resources(Enum):
     Image_Ship_Module_Simple_Phaser = 201
     Image_Ship_Module_Angle_Laser = 202
     Image_Ship_Module_Heavy_Laser = 203
+    Image_Ship_Module_Railgun = 204
     Image_Ship_Module_Hull = 210
     Image_Ship_Module_Repair = 211
+    Image_Ship_Module_Shield = 212
     Image_Ship_Module_Jet = 220
     Image_Ship_Module_Enemy = 300
     Image_Ship_Module_Enemy_Medium = 301
@@ -29,6 +31,7 @@ class Resources(Enum):
     Image_Ship_Module_Enemy_Large = 303
     Image_Ship_Module_Enemy_Boss = 304
     Image_Healthbar = 400
+    Image_Shieldbar = 401
 
 
 class BatchNames(Enum):

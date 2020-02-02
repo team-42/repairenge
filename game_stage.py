@@ -4,6 +4,7 @@ import enemies.behemoth
 import enemies.drone
 import enemies.frigate
 import enemies.reaper
+import enemies.freighter
 import globals
 from enemies.boss import Boss
 from enemies.tinyboss import TinyBoss
@@ -45,8 +46,8 @@ class StageTwo(GameStage):
     def get_enemy(self, enemy_x, enemy_y):
         enemy_type = random.randint(0, 100)
         if enemy_type < globals.defeated_enemies / 2:
-            # behemoth
-            enemy = enemies.behemoth.Behemoth(enemy_x, enemy_y)
+            # freighter
+            enemy = enemies.freighter.Freighter(enemy_x, enemy_y)
         elif enemy_type < globals.defeated_enemies:
             # reaper
             enemy = enemies.reaper.Reaper(enemy_x, enemy_y)

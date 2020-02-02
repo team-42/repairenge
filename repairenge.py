@@ -143,6 +143,9 @@ class Repairenge:
         globals.resources[Resources.Image_Ship_Module_Heavy_Laser] = pyglet.resource.image(
             "resources/ship/component_onbase_heavy_laser.png")
         util.center_image(globals.resources[Resources.Image_Ship_Module_Heavy_Laser])
+        globals.resources[Resources.Image_Ship_Module_Railgun] = pyglet.resource.image(
+            "resources/ship/component_onbase_railgun.png")
+        util.center_image(globals.resources[Resources.Image_Ship_Module_Railgun])
 
         globals.resources[Resources.Image_Ship_Module_Hull] = pyglet.resource.image(
             "resources/ship/component_onbase_hull.png")
@@ -150,6 +153,9 @@ class Repairenge:
         globals.resources[Resources.Image_Ship_Module_Repair] = pyglet.resource.image(
             "resources/ship/component_onbase_repair.png")
         util.center_image(globals.resources[Resources.Image_Ship_Module_Repair])
+        globals.resources[Resources.Image_Ship_Module_Shield] = pyglet.resource.image(
+            "resources/ship/component_onbase_shield.png")
+        util.center_image(globals.resources[Resources.Image_Ship_Module_Shield])
         globals.resources[Resources.Image_Ship_Module_Jet] = pyglet.resource.image(
             "resources/ship/component_onbase_engine.png")
         util.center_image(globals.resources[Resources.Image_Ship_Module_Jet])
@@ -157,6 +163,10 @@ class Repairenge:
         healthbars = pyglet.image.load("resources/healthbar/healthbar.png")
         hb_seq = pyglet.image.ImageGrid(healthbars, 7, 1)
         globals.resources[Resources.Image_Healthbar] = hb_seq
+
+        shieldbars = pyglet.image.load("resources/healthbar/shieldbar.png")
+        sb_seq = pyglet.image.ImageGrid(shieldbars, 7, 1)
+        globals.resources[Resources.Image_Shieldbar] = sb_seq
 
     def draw(self):
         """

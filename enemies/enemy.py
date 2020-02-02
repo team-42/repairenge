@@ -4,6 +4,7 @@ import random
 import globals
 import ship
 from healthbar import Healthbar
+from shieldbar import Shieldbar
 
 
 class Enemy(ship.Ship):
@@ -33,9 +34,11 @@ class StoryEnemy(ship.Ship):
     def __init__(self, is_enemy, resource, *args, **kwargs):
         super().__init__(is_enemy, resource, *args, **kwargs)
         self._healthbar = Healthbar(self)
+        self._shieldbar = Shieldbar(self)
 
     def update(self, dt):
         self._healthbar.update()
+        self._shieldbar.update()
         self.time += dt
         # fly up and down
         self.y += math.sin(self.time) * self.engine_power / self.mass * dt

@@ -7,7 +7,7 @@ from ship_components.ship_component_jet import Jet
 
 class Reaper(enemies.enemy.Enemy):
     def __init__(self, x, y):
-        super(Reaper, self).__init__(x, y, Resources.Image_Ship_Module_Enemy_Medium2)
+        super(Reaper, self).__init__(x, y, Resources.Image_Ship_Module_Enemy_Medium)
 
         self.base_health = 80
 
