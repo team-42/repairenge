@@ -66,7 +66,8 @@ class Repairenge:
 
         # the background starfield
         self._starfield = starfield.StarField(100)
-        self._game_stages = [game_stage.StageOne(), game_stage.StageTwo(), game_stage.StageThree()]
+        self._game_stages = [game_stage.StageOne(), game_stage.StageTwo(), game_stage.StageThree(),
+                             game_stage.StageFour]
 
         self.game_over_label = pyglet.text.Label('Game Over',
                                                  font_name='Arial',
@@ -464,5 +465,4 @@ def on_draw():
 
 pyglet.clock.schedule_interval(update, 1.0 / 60)
 pyglet.app.run()
-play.delete()
 player.delete()

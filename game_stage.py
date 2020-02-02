@@ -2,14 +2,14 @@ import random
 
 import enemies.behemoth
 import enemies.drone
-import enemies.frigate
-import enemies.reaper
 import enemies.freighter
+import enemies.frigate
 import enemies.hammerhead
+import enemies.reaper
 import globals
 from enemies.boss import Boss
-from enemies.tinyboss import TinyBoss
 from enemies.goliath import Goliath
+from enemies.tinyboss import TinyBoss
 
 
 class GameStage:
@@ -31,7 +31,7 @@ class StageOne(GameStage):
         return TinyBoss(x, y)
 
     def get_enemy(self, enemy_x, enemy_y):
-        return enemies.hammerhead.Hammerhead(enemy_x, enemy_y)
+        return enemies.drone.Drone(enemy_x, enemy_y)
 
     def get_num_enemies_to_defeat(self):
         return 10
@@ -42,19 +42,46 @@ class StageOne(GameStage):
 
 class StageTwo(GameStage):
     def get_boss(self, x, y):
+        return TinyBoss(x, y)
+
+    def get_enemy(self, enemy_x, enemy_y):
+        enemy_type = random.randint(0, 100)
+        if enemy_type < 50:
+            # drone
+            enemy = enemies.drone.Drone(enemy_x, enemy_y)
+        elif enemy_type < 92:
+            # hammerhead
+            enemy = enemies.hammerhead.Hammerhead(enemy_x, enemy_y)
+        else:
+            # frigate
+            enemy = enemies.frigate.Frigate(enemy_x, enemy_y)
+        return enemy
+
+    def get_num_enemies_to_defeat(self):
+        return 10
+
+    def get_enemy_density(self):
+        return 0.4
+
+
+class StageThree(GameStage):
+    def get_boss(self, x, y):
         return Boss(x, y)
 
     def get_enemy(self, enemy_x, enemy_y):
         enemy_type = random.randint(0, 100)
         if enemy_type < globals.defeated_enemies / 2:
-            # freighter
-            enemy = enemies.freighter.Freighter(enemy_x, enemy_y)
+            # behemoth
+            enemy = enemies.behemoth.Behemoth(enemy_x, enemy_y)
         elif enemy_type < globals.defeated_enemies:
             # reaper
             enemy = enemies.reaper.Reaper(enemy_x, enemy_y)
         elif enemy_type < globals.defeated_enemies * 2.5:
             # frigate
             enemy = enemies.frigate.Frigate(enemy_x, enemy_y)
+        elif enemy_type > 80:
+            # freighter
+            enemy = enemies.freighter.Freighter(enemy_x, enemy_y)
         else:
             enemy = enemies.drone.Drone(enemy_x, enemy_y)
         return enemy
@@ -66,7 +93,7 @@ class StageTwo(GameStage):
         return 0.4
 
 
-class StageThree(GameStage):
+class StageFour(GameStage):
     def get_boss(self, x, y):
         return Goliath(x, y)
 
@@ -75,9 +102,12 @@ class StageThree(GameStage):
         if enemy_type < 30:
             # behemoth
             enemy = enemies.behemoth.Behemoth(enemy_x, enemy_y)
-        elif enemy_type < 60:
+        elif enemy_type < 50:
             # reaper
             enemy = enemies.reaper.Reaper(enemy_x, enemy_y)
+        elif enemy_type < 70:
+            # hammerhead
+            enemy = enemies.hammerhead.Hammerhead(enemy_x, enemy_y)
         else:
             # frigate
             enemy = enemies.frigate.Frigate(enemy_x, enemy_y)
