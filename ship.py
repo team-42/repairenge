@@ -4,6 +4,7 @@ import pyglet
 
 import globals
 from constants import BatchNames
+from collections import deque
 
 
 class Ship(pyglet.sprite.Sprite):
@@ -78,16 +79,59 @@ class Ship(pyglet.sprite.Sprite):
                         globals.components.append(module)
                 self.modules = None
 
+    def _add_to_queue(self, open_list, closed_dict, slot):
+        if slot not in closed_dict:
+            open_list.append(slot)
+            closed_dict[slot] = 1
+
+    def _add_neighbours(self, open_list, closed_dict, slot):
+        next_slot = (slot[0], slot[1] - 1)
+        self._add_to_queue(open_list, closed_dict, next_slot)
+        next_slot = (slot[0] - 1, slot[1])
+        self._add_to_queue(open_list, closed_dict, next_slot)
+        next_slot = (slot[0], slot[1] + 1)
+        self._add_to_queue(open_list, closed_dict, next_slot)
+        next_slot = (slot[0] + 1, slot[1])
+        self._add_to_queue(open_list, closed_dict, next_slot)
+
+    def _get_next_free_slot(self, slot):
+        """
+        determine the next free slot from the given one
+         if the given one is free: use it
+         else: search with 4-neighbourhood, in following order: bottom, left, top, right
+        :param slot:
+        :return: the free slot
+        """
+        open_list = deque()
+        closed_dict = self.grid.copy()
+        # first add this slot
+        self._add_to_queue(open_list,closed_dict, slot)
+        while len(open_list) > 0:
+            # get next slot to check
+            slot_to_check = open_list.popleft()
+            if slot_to_check not in self.grid:
+                return slot
+            else:
+                # add neighbours to queue
+                self._add_neighbours(open_list,closed_dict, slot_to_check)
+        # default return an invalid slot
+        return (0,0)
+
     def upgrade(self, sm):
-        # only add it to the ship if the corresponding slot is free
+        # add module to the ship at the next free slot
         slot = (int(sm._local_x), int(sm._local_y))
+        slot = self._get_next_free_slot(slot)
+        print("selected slot: {}".format(slot))
         if slot not in self.grid:
+            print("slot was free")
             # calculate the local coordinates for the slot
             sm._local_x *= 32
             sm._local_y *= 32
             self.grid[slot] = 1
             sm.module_initial(self)
             self.modules.append(sm)
+        else:
+            print("slot was not free")
 
     def get_count_of_component_type(self, component_type):
         result: int = 0
