@@ -10,6 +10,7 @@ class HeavyHull(ship_component.ShipComponent):
                          batch=globals.sprite_batches[BatchNames.Component_Batch], *args, **kwargs)
 
     def module_initial(self, ship):
+        super(HeavyHull, self).module_initial(ship)
         ship.mass += 200
         ship.base_health += 50
         ship.health_multiplier += 0.2

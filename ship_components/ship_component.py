@@ -18,7 +18,8 @@ class ShipComponent(pyglet.sprite.Sprite):
             self.y = self._owner.y + self._local_y
 
     def module_initial(self, ship):
-        pass
+        if ship.is_enemy:
+            self.rotation = 180
 
 #    def get_mass(self):
 #        return self.mass

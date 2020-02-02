@@ -255,6 +255,7 @@ class Repairenge:
                     module._local_x = new_x
                     module._local_y = new_y
                     module._owner = globals.player_ship
+                    module.rotation = 0
                     globals.player_ship.upgrade(module)
                     if i == len(globals.components) - 1:
                         globals.components.pop()

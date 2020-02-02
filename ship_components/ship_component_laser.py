@@ -37,6 +37,7 @@ class ShipComponentLaser(ship_component.ShipComponent):
             self.ts_check_fire *= random.random()
 
     def module_initial(self, ship):
+        super(ShipComponentLaser, self).module_initial(ship)
         if self.laser_type == LaserType.SimpleLaser:
             self.init_simple_laser()
         elif self.laser_type == LaserType.AngleLaser:

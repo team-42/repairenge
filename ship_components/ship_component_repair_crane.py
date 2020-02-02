@@ -15,6 +15,7 @@ class RepairCrane(ship_component.ShipComponent):
         self.ts_check_heal = 1
 
     def module_initial(self, ship):
+        super(RepairCrane, self).module_initial(ship)
         ship.mass += self.mass
         self.ts_check_heal = self.cd
 
