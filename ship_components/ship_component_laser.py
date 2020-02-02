@@ -76,7 +76,7 @@ class ShipComponentLaser(ship_component.ShipComponent):
                     print("my lasertype: {}".format(self.laser_type))
                     for proj in projectile:
                         globals.player_projectiles.append(proj)
-                elif globals.controls[Controls.Action_1]:
+                elif globals.controls[Controls.Action_1] and LaserType.RailGun == self.laser_type:
                     projectile = self.get_rail_gun(self._owner.x + self._local_x, self._owner.y + self._local_y, is_player)
                     self.ts_check_fire = self.cd - 0.01 + 0.02 * random.random()
                     print("my lasertype: {}".format(self.laser_type))
@@ -84,7 +84,7 @@ class ShipComponentLaser(ship_component.ShipComponent):
                         globals.player_projectiles.append(proj)
 
     def get_std_projectile(self, is_player):
-        projectile = None
+        projectile = []
         if self.laser_type == LaserType.SimpleLaser:
             projectile = self.get_simple_laser_projectile(self._owner.x + self._local_x, self._owner.y + self._local_y, is_player)
         elif self.laser_type == LaserType.AngleLaser:
@@ -124,7 +124,7 @@ class ShipComponentLaser(ship_component.ShipComponent):
     def init_heavy_laser(self):
         self.mass = 50
         self.dmg = 30
-        self.cd = 3
+        self.cd = 2
         self.speed = 1000
         self.dir_vec = [1, 0]
 
@@ -136,7 +136,7 @@ class ShipComponentLaser(ship_component.ShipComponent):
     def init_rail_gun(self):
         self.mass = 300
         self.dmg = 100
-        self.cd = 1
+        self.cd = 5
         self.speed = 2000
         self.dir_vec = [1, 0]
 
@@ -152,13 +152,17 @@ class ShipComponentLaser(ship_component.ShipComponent):
         else:
             closest_enemy = globals.player_ship
 
+        if closest_enemy is None:
+            return []
         print("Closest Enemy for Railgun: {}/{}".format(closest_enemy.x, closest_enemy.y))
 
-        # angle = math.degrees(math.atan2(closest_enemy.y - y, closest_enemy.x - x))
-        angle = math.degrees(math.atan((closest_enemy.y - y) / (closest_enemy.x - x)))
+        target_vec = [0, 0]
+        target_vec[0] = closest_enemy.x - self.x
+        target_vec[1] = closest_enemy.y - self.y
+        length = util.get_vector_length(target_vec)
+        target_vec[0] /= length
+        target_vec[1] /= length
 
-        # angle = angle if angle >= 0 else angle + 360
-
-        proj = ProjectileLaser(x, y, self.speed, angle, is_player, self.dmg)
+        proj = ProjectileLaser(x, y, self.speed, target_vec, is_player, self.dmg)
         proj.scale = 4.0
         return [proj]
