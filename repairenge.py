@@ -1,27 +1,29 @@
 import random
 
 import pyglet
-import ship
 from pyglet.text import Label
 from pyglet.window import key
 
 import enemies.drone
+import enemies.frigate
+import enemies.reaper
+import enemies.behemoth
 import globals
 import player_ship
+import ship
 import starfield
 import util
 from constants import BatchNames
 from constants import Controls
 from constants import Resources
 from enemies.boss import Boss
-import math
 
 CONDITION_RUNNING = 1
 CONDITION_SPAWN_BOSS = 2
 CONDITION_BOSS = 3
 CONDITION_LOSS = -1
 CONDITION_WIN = -2
-NUM_ENEMIES_TO_DEFEAT = 1
+NUM_ENEMIES_TO_DEFEAT = 30
 
 # raw_names on ps4 controller
 controls_to_follow = ["ABS_RX", "ABS_RY", "ABS_X", "ABS_Y", "BTN_TL", "BTN_TR", "BTN_TL2", "BTN_TR2", "BTN_A", "BTN_B",
@@ -42,6 +44,7 @@ player = pyglet.media.Player()
 player.queue(play)
 player.loop = True
 player.play()
+
 
 class Repairenge:
     """
@@ -130,7 +133,6 @@ class Repairenge:
             "resources/ship/enemy_boss_body.png")
         globals.resources[Resources.Image_Ship_Module_Enemy_Boss].anchor_x = 32 + 16
         globals.resources[Resources.Image_Ship_Module_Enemy_Boss].anchor_y = 16
-
 
         globals.resources[Resources.Image_Ship_Module_Simple_Phaser] = pyglet.resource.image(
             "resources/ship/component_onbase_phaser.png")
@@ -291,14 +293,26 @@ class Repairenge:
         self._update_and_delete(globals.components, dt)
 
         # randomly add enemies:
-        if random.random() < dt * 0.5:
+        if random.random() < dt * 0.4:
+            enemy_x = globals.window.width + 50
+            enemy_y = random.random() * (globals.window.height / 4) + globals.window.height / 2
             if self.game_condition == CONDITION_RUNNING:
-                drone = enemies.drone.Drone(globals.window.width + 50,
-                                            random.random() * (globals.window.height / 4) + globals.window.height / 2)
-                globals.enemies.append(drone)
+                enemy_type = random.randint(0, 100)
+                if enemy_type < globals.defeated_enemies / 6:
+                    # behemoth
+                    enemy = enemies.behemoth.Behemoth(enemy_x, enemy_y)
+                if enemy_type < globals.defeated_enemies:
+                    # reaper
+                    enemy = enemies.reaper.Reaper(enemy_x, enemy_y)
+                elif enemy_type < globals.defeated_enemies * 2:
+                    # frigate
+                    enemy = enemies.frigate.Frigate(enemy_x, enemy_y)
+                else:
+                    enemy = enemies.drone.Drone(enemy_x, enemy_y)
+                globals.enemies.append(enemy)
             elif self.game_condition == CONDITION_SPAWN_BOSS:
-                self.boss = Boss(globals.window.width + 50,
-                                 random.random() * (globals.window.height / 4) + globals.window.height / 2)
+                self.boss = Boss(enemy_x,
+                                 enemy_y)
                 globals.enemies.append(self.boss)
                 print("Game condition has changed to BOSS")
                 self.game_condition = CONDITION_BOSS
