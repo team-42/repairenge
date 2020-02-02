@@ -8,23 +8,26 @@ from constants import LaserColors
 
 
 class ProjectileLaser(Projectile):
-    def __init__(self, x, y, speed, angle, direction, dmg, *args, **kwargs):
+    def __init__(self, x, y, speed, dir_vec, is_from_player, dmg, *args, **kwargs):
         super(ProjectileLaser, self).__init__(x, y, speed, dmg,
                                               globals.resources[Resources.Image_Projectiles_Energy_01],
                                               batch=globals.sprite_batches[BatchNames.Projectile_Batch],
                                               *args, *kwargs)
-        if direction == -1:
+        if is_from_player:
             self.color = LaserColors.Player_Ship.value
+            self.dir_vec = dir_vec
         else:
             self.color = LaserColors.Enemy_Ship.value
+            self.dir_vec = dir_vec
+            self.dir_vec[0] *= -1
+
         self.scale = 1
-        self.angle = angle
+        self.is_from_player = is_from_player
 
     def update(self, dt):
-        rad = self.angle * math.pi / 180
-        self.x += self.speed * math.sin(rad) * dt
-        self.y += self.speed * math.cos(rad) * dt
+        self.x += self.speed * self.dir_vec[0] * dt
+        self.y += self.speed * self.dir_vec[1] * dt
 
         # check if this is outside the screen
-        if self.x > globals.window.width or self.x < -50 or self.y < -50 or self.y > globals.window.height:
+        if self.x > globals.window.width + 50 or self.x < -50 or self.y < -50 or self.y > globals.window.height + 50:
             self.alive = False
