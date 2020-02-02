@@ -25,7 +25,7 @@ class Boss(StoryEnemy):
         self.upgrade(smsp.ShipComponentLaser(-1, 1, self, smsp.LaserType.AngleLaser))
         self.upgrade(smsp.ShipComponentLaser(-1, -2, self, smsp.LaserType.HeavyLaser))
         self.upgrade(smsp.ShipComponentLaser(-1, 2, self, smsp.LaserType.HeavyLaser))
-        self.upgrade(smsp.ShipComponentLaser(1, 0, self, smsp.LaserType.HeavyLaser))
+        self.upgrade(smsp.ShipComponentLaser(1, 0, self, smsp.LaserType.RailGun))
 
         self.upgrade(HeavyHull(0, -2, self))
         self.upgrade(HeavyHull(1, -2, self))
