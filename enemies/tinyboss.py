@@ -22,3 +22,5 @@ class TinyBoss(StoryEnemy):
 
         self.upgrade(smsp.ShipComponentLaser(-1, -1, self, smsp.LaserType.SimpleLaser))
         self.upgrade(smsp.ShipComponentLaser(-1, 1, self, smsp.LaserType.SimpleLaser))
+        self.upgrade(smsp.ShipComponentLaser(-2, 0, self, smsp.LaserType.SimpleLaser))
+        self.upgrade(smsp.ShipComponentLaser(1, 0, self, smsp.LaserType.SimpleLaser))

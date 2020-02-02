@@ -1,8 +1,9 @@
-import pyglet
-import globals
-from constants import Resources
-from constants import BatchNames
 import random
+
+import pyglet
+
+import globals
+from constants import BatchNames
 
 
 class Ship(pyglet.sprite.Sprite):
@@ -59,7 +60,9 @@ class Ship(pyglet.sprite.Sprite):
                 self.alive = False
                 # drop components
                 for module in self.modules:
-                    if random.random() < 0.5:
+                    count_on_player_ship = globals.player_ship.get_count_of_component_type(module)
+                    print("Count of {} on player ship is {}".format(type(module), count_on_player_ship))
+                    if random.random() < pow(0.8, 1 + count_on_player_ship):
                         module._local_x = 0
                         module._local_y = 0
                         module._owner = None
@@ -76,6 +79,13 @@ class Ship(pyglet.sprite.Sprite):
             self.grid[slot] = 1
             sm.module_initial(self)
             self.modules.append(sm)
+
+    def get_count_of_component_type(self, component_type):
+        result: int = 0
+        for module in self.modules:
+            if module.image == component_type.image:
+                result += 1
+        return result
 
     def get_health(self):
         return self.get_max_health() - self.damage_taken

@@ -67,7 +67,7 @@ class Repairenge:
 
         # the background starfield
         self._starfield = starfield.StarField(100)
-        self._game_stages = [game_stage.StageOne(), game_stage.StageTwo()]
+        self._game_stages = [game_stage.StageOne(), game_stage.StageTwo(), game_stage.StageThree()]
 
         self.game_over_label = pyglet.text.Label('Game Over',
                                                  font_name='Arial',
@@ -303,7 +303,7 @@ class Repairenge:
         self._update_and_delete(globals.components, dt)
 
         # randomly add enemies:
-        if random.random() < dt * 0.4:
+        if random.random() < dt * self._game_stages[self.current_stage].get_enemy_density():
             enemy_x = globals.window.width + 50
             enemy_y = random.random() * (globals.window.height / 4) + globals.window.height / 2
             if self.game_condition == CONDITION_RUNNING:

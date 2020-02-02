@@ -7,6 +7,7 @@ import enemies.reaper
 import globals
 from enemies.boss import Boss
 from enemies.tinyboss import TinyBoss
+from enemies.goliath import Goliath
 
 
 class GameStage:
@@ -19,6 +20,9 @@ class GameStage:
     def get_num_enemies_to_defeat(self):
         pass
 
+    def get_enemy_density(self):
+        return 0.5
+
 
 class StageOne(GameStage):
     def get_boss(self, x, y):
@@ -29,6 +33,9 @@ class StageOne(GameStage):
 
     def get_num_enemies_to_defeat(self):
         return 10
+
+    def get_enemy_density(self):
+        return 0.3
 
 
 class StageTwo(GameStage):
@@ -52,3 +59,30 @@ class StageTwo(GameStage):
 
     def get_num_enemies_to_defeat(self):
         return 30
+
+    def get_enemy_density(self):
+        return 0.4
+
+
+class StageThree(GameStage):
+    def get_boss(self, x, y):
+        return Goliath(x, y)
+
+    def get_enemy(self, enemy_x, enemy_y):
+        enemy_type = random.randint(0, 100)
+        if enemy_type < 30:
+            # behemoth
+            enemy = enemies.behemoth.Behemoth(enemy_x, enemy_y)
+        elif enemy_type < 60:
+            # reaper
+            enemy = enemies.reaper.Reaper(enemy_x, enemy_y)
+        else:
+            # frigate
+            enemy = enemies.frigate.Frigate(enemy_x, enemy_y)
+        return enemy
+
+    def get_num_enemies_to_defeat(self):
+        return 30
+
+    def get_enemy_density(self):
+        return 0.5
