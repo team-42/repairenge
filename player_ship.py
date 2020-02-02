@@ -5,6 +5,7 @@ from constants import Controls, Resources
 from ship_components.ship_component_heavy_hull import HeavyHull
 from ship_components.ship_component_jet import Jet
 from ship_components.ship_component_repair_crane import RepairCrane
+from healthbar import Healthbar
 
 
 class PlayerShip(ship.Ship):
@@ -12,6 +13,7 @@ class PlayerShip(ship.Ship):
         super(PlayerShip, self).__init__(False, Resources.Image_Ship_Module_Base)
 
         self.upgrade(smsp.ShipComponentLaser(1, 0, self, smsp.LaserType.AngleLaser))
+        self._healthbar = Healthbar(self)
         # self.upgrade(smsp.ShipComponentLaser(0, -2, self, smsp.LaserType.HeavyLaser))
         # self.upgrade(smsp.ShipComponentLaser(0, 2, self, smsp.LaserType.HeavyLaser))
         # self.upgrade(smsp.ShipComponentLaser(1, -1, self, smsp.LaserType.SimpleLaser))
@@ -31,6 +33,7 @@ class PlayerShip(ship.Ship):
         :param dt:
         :return:
         """
+        self._healthbar.update()
         # controls:
         if globals.controls[Controls.Up]:
             self.y += self.engine_power / self.mass * dt

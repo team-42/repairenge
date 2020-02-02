@@ -28,6 +28,7 @@ class Resources(Enum):
     Image_Ship_Module_Enemy_Medium2 = 302
     Image_Ship_Module_Enemy_Large = 303
     Image_Ship_Module_Enemy_Boss = 304
+    Image_Healthbar = 400
 
 
 class BatchNames(Enum):
@@ -36,6 +37,7 @@ class BatchNames(Enum):
     Projectile_Batch = 2
     Player_Ship_Batch = 3
     Component_Batch = 4
+    Health_Bar_Batch = 5
 
 
 class LaserColors(Enum):

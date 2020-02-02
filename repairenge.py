@@ -94,6 +94,7 @@ class Repairenge:
         globals.sprite_batches[BatchNames.Projectile_Batch] = pyglet.graphics.Batch()
         globals.sprite_batches[BatchNames.Player_Ship_Batch] = pyglet.graphics.Batch()
         globals.sprite_batches[BatchNames.Component_Batch] = pyglet.graphics.Batch()
+        globals.sprite_batches[BatchNames.Health_Bar_Batch] = pyglet.graphics.Batch()
 
         # load the images
         globals.resources[Resources.Image_Starfield] = pyglet.resource.image(
@@ -153,6 +154,10 @@ class Repairenge:
         globals.resources[Resources.Image_Ship_Module_Jet] = pyglet.resource.image(
             "resources/ship/component_onbase_engine.png")
         util.center_image(globals.resources[Resources.Image_Ship_Module_Jet])
+
+        healthbars = pyglet.image.load("resources/healthbar/healthbar.png")
+        hb_seq = pyglet.image.ImageGrid(healthbars, 7, 1)
+        globals.resources[Resources.Image_Healthbar] = hb_seq
 
     def draw(self):
         """
@@ -231,7 +236,7 @@ class Repairenge:
                 # calc distance
                 distance_x = globals.player_ship.x + (slot[0] * 32) - module.x
                 distance_y = globals.player_ship.y + (slot[1] * 32) - module.y
-                if distance_x > -32 and distance_x < 32 and distance_y > -32 and distance_y < 32:
+                if -32 < distance_x <= 32 and -32 < distance_y <= 32:
                     # calculate slot to attach to
                     x_dir = 0
                     y_dir = 0

@@ -83,6 +83,9 @@ class Ship(pyglet.sprite.Sprite):
     def get_max_health(self):
         return self.base_health * self.health_multiplier
 
+    def get_health_percentage(self):
+        return self.get_health() * 100 / self.get_max_health()
+
     def damage(self, dmg):
         self.damage_taken += dmg
         if self.get_health() <= 0:

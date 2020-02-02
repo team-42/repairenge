@@ -8,11 +8,13 @@ from ship_components.ship_component_heavy_hull import HeavyHull
 from ship_components.ship_component_jet import Jet
 from ship_components.ship_component_repair_crane import RepairCrane
 from constants import Resources
+from healthbar import Healthbar
 
 
 class Boss(ship.Ship):
     def __init__(self, x, y):
         super(Boss, self).__init__(True, Resources.Image_Ship_Module_Enemy_Boss)
+        self._healthbar = Healthbar(self)
 
         self.x = x
         self.y = y
@@ -43,6 +45,7 @@ class Boss(ship.Ship):
         self.upgrade(Jet(1, 1, self))
 
     def update(self, dt):
+        self._healthbar.update()
         self.time += dt
         # fly up and down
         self.y += math.sin(self.time) * self.engine_power / self.mass * dt
