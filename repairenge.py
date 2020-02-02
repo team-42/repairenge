@@ -15,6 +15,7 @@ from constants import Controls
 from constants import Resources
 from enemies.boss import Boss
 from enemies.enemy import StoryEnemy
+from music import MusicQueue
 
 CONDITION_RUNNING = 1
 CONDITION_SPAWN_BOSS = 2
@@ -36,10 +37,8 @@ window.push_handlers(keyboard)
 
 devices = pyglet.input.get_devices()
 
-play = pyglet.media.load('resources/music/complete.wav')
 player = pyglet.media.Player()
-player.queue(play)
-player.loop = True
+player.queue(MusicQueue())
 player.play()
 
 
