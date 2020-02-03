@@ -103,9 +103,9 @@ class Repairenge:
         # define the sprite batches, the order defines the rendering order of rendering
         globals.sprite_batches[BatchNames.Star_Batch] = pyglet.graphics.Batch()
         globals.sprite_batches[BatchNames.Enemy_Batch] = pyglet.graphics.Batch()
-        globals.sprite_batches[BatchNames.Projectile_Batch] = pyglet.graphics.Batch()
         globals.sprite_batches[BatchNames.Player_Ship_Batch] = pyglet.graphics.Batch()
         globals.sprite_batches[BatchNames.Component_Batch] = pyglet.graphics.Batch()
+        globals.sprite_batches[BatchNames.Projectile_Batch] = pyglet.graphics.Batch()
         globals.sprite_batches[BatchNames.Health_Bar_Batch] = pyglet.graphics.Batch()
 
         # load the images
