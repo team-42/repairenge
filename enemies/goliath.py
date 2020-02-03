@@ -12,7 +12,7 @@ from ship_components.ship_component_repair_crane import RepairCrane
 
 class Goliath(StoryEnemy):
     def __init__(self, x, y):
-        super(Goliath, self).__init__(True, Resources.Image_Ship_Module_Enemy_Boss)
+        super(Goliath, self).__init__(True, Resources.Image_Ship_Module_Enemy_Endboss)
         self.x = x
         self.y = globals.window.height / 2 - 32 * 5 - 16
         self.engine_power = self.engine_power / 2

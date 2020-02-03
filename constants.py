@@ -32,6 +32,7 @@ class Resources(Enum):
     Image_Ship_Module_Enemy_Large = 303
     Image_Ship_Module_Enemy_Boss = 304
     Image_Ship_Module_Enemy_RailGun = 305
+    Image_Ship_Module_Enemy_Endboss = 306
     Image_Healthbar = 400
     Image_Shieldbar = 401
 
