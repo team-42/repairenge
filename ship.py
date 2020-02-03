@@ -107,7 +107,7 @@ class Ship(pyglet.sprite.Sprite):
         open_list = deque()
         closed_dict = self.grid.copy()
         # first add this slot
-        self._add_to_queue(open_list,closed_dict, slot)
+        self._add_to_queue(open_list, closed_dict, slot)
         while len(open_list) > 0:
             # get next slot to check
             slot_to_check = open_list.popleft()
@@ -115,9 +115,9 @@ class Ship(pyglet.sprite.Sprite):
                 return slot
             else:
                 # add neighbours to queue
-                self._add_neighbours(open_list,closed_dict, slot_to_check)
+                self._add_neighbours(open_list, closed_dict, slot_to_check)
         # default return an invalid slot
-        return (0,0)
+        return (0, 0)
 
     def upgrade(self, sm):
         # add module to the ship at the next free slot

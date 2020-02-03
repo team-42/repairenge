@@ -135,9 +135,9 @@ class ShipComponentLaser(ship_component.ShipComponent):
 
     def init_rail_gun(self):
         self.mass = 300
-        self.dmg = 100
-        self.cd = 5
-        self.speed = 2000
+        self.dmg = 80
+        self.cd = 3
+        self.speed = 1800
         self.dir_vec = [1, 0]
 
     def get_rail_gun(self, x, y, is_player):

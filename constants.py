@@ -47,5 +47,5 @@ class BatchNames(Enum):
 
 
 class LaserColors(Enum):
-    Player_Ship = (80, 80, 255)
+    Player_Ship = (180, 180, 255)
     Enemy_Ship = (255, 122, 65)

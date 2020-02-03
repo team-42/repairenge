@@ -11,6 +11,7 @@ class PlayerShip(ship.Ship):
         super(PlayerShip, self).__init__(False, Resources.Image_Ship_Module_Base)
 
         self.upgrade(smsp.ShipComponentLaser(1, 0, self, smsp.LaserType.AngleLaser))
+        #self.upgrade(smsp.ShipComponentLaser(2, 0, self, smsp.LaserType.RailGun))
         self._healthbar = Healthbar(self)
         self._shieldbar = Shieldbar(self)
         # self.upgrade(smsp.ShipComponentLaser(0, -2, self, smsp.LaserType.HeavyLaser))
