@@ -42,6 +42,9 @@ We have developed the game idea, source code and all sound ourselves. The team c
 
 ### Third-party contributions
 
-The enemy ship bodies as well as several components have been taken from https://craftpix.net/freebies/free-pixel-art-enemy-spaceship-2d-sprites/
+The enemy ship bodies as well as several components have been taken from
+* https://craftpix.net/freebies/free-pixel-art-enemy-spaceship-2d-sprites/
+* https://opengameart.org/content/nihil-ace-spaceship-building-pack-expansion by [Buch](https://opengameart.org/users/buch) 
+* https://opengameart.org/content/set-faction4-spaceships by [MillionthVector](http://millionthvector.blogspot.de)
 
 Credits also to the Global Game Jam for creating a weekend full of creativity all around the globe.
