@@ -42,5 +42,5 @@ class Hammerhead(enemies.enemy.Enemy):
         Ship.update(self, dt)
 
         # kill the drone if its out of screen
-        if self.x < -50:
+        if self.x < -112:  # 32xColumns right of center + 16
             self.alive = False
