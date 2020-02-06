@@ -16,6 +16,8 @@ class ShipComponent(pyglet.sprite.Sprite):
         if self._owner is not None:
             self.x = self._owner.x + self._local_x
             self.y = self._owner.y + self._local_y
+        else:
+            self.x -= 2
 
     def module_initial(self, ship):
         if ship.is_enemy:
