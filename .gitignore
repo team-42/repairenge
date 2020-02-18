@@ -32,8 +32,6 @@ MANIFEST
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
-#  This spec file is committed because it contains custom build configuration
-!repairenge.spec
 
 # Installer logs
 pip-log.txt

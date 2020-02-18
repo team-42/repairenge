@@ -20,7 +20,7 @@ To run the game, either clone the repository and run `repairenge.py` or download
 
 To build an executable, execute
 
-    pyinstaller repairenge.spec
+    ./build.sh
 
 in the main directory. If you don't have pyinstaller yet, use
 
