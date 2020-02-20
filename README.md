@@ -40,6 +40,11 @@ We have developed the game idea, source code and all sound ourselves. The team c
 * PhilippEins
 * SharkofMetal
 
+### Libraries
+
+This game was developed with the [pyglet library](https://github.com/pyglet/pyglet).
+We very much appreciate their approach for providing a simple to use cross-platform windowing and multimedia library for Python.
+
 ### Third-party contributions
 
 The enemy ship bodies as well as several components have been taken from
