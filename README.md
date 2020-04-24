@@ -14,7 +14,9 @@ The game can also be played with a game controller. However, not all controllers
 
 ## Running the game
 
-To run the game, either clone the repository and run `repairenge.py` or download a pre-built release for your platform and run the game executable (e.g. repairenge.exe)
+To run the game, either clone the repository and run `python repairenge.py` or download a pre-built release for your platform and run the game executable (e.g. repairenge.exe). If you don't have that yet, you may need to download pyglet first:
+
+    pip install pyglet
 
 ## Building the game
 
